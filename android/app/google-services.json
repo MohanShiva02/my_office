@@ -98,7 +98,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:566962550940:android:a6990ea93cd84de59e5559",
         "android_client_info": {
-          "package_name": "com.onwords.my_office"
+          "package_name": "com.onwords.myoffice"
         }
       },
       "oauth_client": [
@@ -106,7 +106,7 @@
           "client_id": "566962550940-1ru38h04avgqitv9v266323fho0fh20k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.onwords.my_office",
+            "package_name": "com.onwords.myoffice",
             "certificate_hash": "99ff8e10045d008e9d453b521601c344ff85e4a7"
           }
         },

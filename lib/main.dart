@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
+import 'package:my_office/firebase_options.dart';
 import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
@@ -15,7 +16,9 @@ import 'models/visit_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
 
   //Hive database Setup
   await Hive.initFlutter();

@@ -23,6 +23,8 @@ class WorkCompleteViewScreen extends StatefulWidget {
 }
 
 class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
+
+
   final staff = FirebaseDatabase.instance.ref().child("staff");
 
   double percent = 0;
@@ -52,7 +54,6 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
       selectedDate = formatterDate.format(newDate);
       selectedMonth = newDate.toString().substring(5, 7);
       selectedYear = newDate.toString().substring(0, 4);
-      // print(selectedYear);
       if (selectedDate != null) {
         getWorkDetails();
       }
@@ -67,9 +68,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
   List workDetailsList = [];
   List percentList = [];
   List totalTimeList = [];
-
-  // List dayTotalWork = [];
-
+  List workingHoursList = [];
   var fbData;
 
   getWorkDetails() {
@@ -84,6 +83,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
     endTimeList.clear();
     workDetailsList.clear();
     percentList.clear();
+    workingHoursList.clear();
     staff.once().then((value) {
       for (var element in value.snapshot.children) {
         for (var element1 in element.children) {
@@ -116,6 +116,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                                 nameList.add(fbData['name']);
                                 startTimeList.add(fbData['to']);
                                 endTimeList.add(fbData['from']);
+                                workingHoursList.add(fbData['time_in_hours']);
                               });
                             }
                           }
@@ -127,37 +128,11 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
               }
             }
           }
-          // for (var element2 in element1.children) {
-          //
-          //   for (var element3 in element2.children) {
-          //
-          //     // if (element3.key == selectedDate) {
-          //     //   for (var element4 in element3.children) {
-          // //     //     // print(element4.value);
-          //     //     fbData = element4.value;
-          //     //     setState(() {
-          //     //       allData.add(fbData);
-          // //     //       // print("allData......${allData}");
-          //     //       nameData.add(fbData['name']);
-          //     //       nameData = nameData.toSet().toList();
-          // //     //       // print('data2 ..................${nameData}');
-          //     //       name.add(fbData['name']);
-          //     //       to.add(fbData['to']);
-          //     //       from.add(fbData['from']);
-          //     //       workDone.add(fbData['workDone']);
-          //     //       workPercentage.add(fbData['workPercentage']);
-          //     //       totalTime.add(fbData["time_in_hours"]);
-          //     //     });
-          //     //   }
-          //     // }
-          //   }
-          // }
         }
       }
       if (!mounted) return;
       setState(() {
         isLoading = false;
-        // print('bottom  value $isLoading');
       });
     });
   }
@@ -239,75 +214,75 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
               bottom: height * 0.0,
               child: isLoading
                   ? Center(
-                      child: Lottie.asset(
-                        "assets/animations/loading.json",
-                      ),
-                    )
+                child: Lottie.asset(
+                  "assets/animations/loading.json",
+                ),
+              )
                   : nameData.isNotEmpty
-                      ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: nameData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width * 0.05,
-                                    vertical: height * 0.02),
-                                decoration: BoxDecoration(
-                                  color: ConstantColor.background1Color,
-                                  border: Border.all(
-                                      color: Colors.white.withOpacity(0.6),
-                                      width: width * 0.008),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      offset: const Offset(-0.0, 3.0),
-                                      blurRadius: 5,
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(11),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        textWidget(
-                                            height,
-                                            '${nameData[index]}  ',
-                                            height * 0.018),
-                                      ],
-                                    ),
-                                    Container(
-                                      height: height * 0.38,
-                                      color: Colors.transparent,
-                                      child: SingleChildScrollView(
-                                        physics: const BouncingScrollPhysics(),
-                                        child: Column(
-                                          children: [
-                                            workDetailsContainer(
-                                                height, width, index)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ));
-                          },
-                        )
-                      : Center(
-                          child: Text(
-                            'No Data',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
-                              fontSize: height * 0.030,
+                  ? ListView.builder(
+                scrollDirection: Axis.vertical,
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: nameData.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                      margin: EdgeInsets.symmetric(
+                          horizontal: width * 0.05,
+                          vertical: height * 0.02),
+                      decoration: BoxDecoration(
+                        color: ConstantColor.background1Color,
+                        border: Border.all(
+                            color: Colors.white.withOpacity(0.6),
+                            width: width * 0.008),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: const Offset(-0.0, 3.0),
+                            blurRadius: 5,
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Column(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceAround,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              textWidget(
+                                  height,
+                                  '${nameData[index]}  ',
+                                  height * 0.018),
+                            ],
+                          ),
+                          Container(
+                            height: height * 0.38,
+                            color: Colors.transparent,
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: Column(
+                                children: [
+                                  workDetailsContainer(
+                                      height, width, index)
+                                ],
+                              ),
                             ),
                           ),
-                        )),
+                        ],
+                      ));
+                },
+              )
+                  : Center(
+                child: Text(
+                  'No Data',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                    color: ConstantColor.blackColor,
+                    fontSize: height * 0.030,
+                  ),
+                ),
+              )),
 
           /// Date Picker
           Positioned(
@@ -351,84 +326,84 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
         itemBuilder: (BuildContext context, int ind) {
           return allData[ind]['name'].contains(nameData[index])
               ? Container(
-                  height: height * 0.25,
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: ConstantColor.background1Color,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        offset: const Offset(-0.0, 0.0),
-                        blurRadius: 3,
+            height: height * 0.25,
+            margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: ConstantColor.background1Color,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: const Offset(-0.0, 0.0),
+                  blurRadius: 3,
+                ),
+              ],
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: height * 0.02,
+                        horizontal: width * 0.02),
+                    padding: const EdgeInsets.all(8),
+                    height: height * 0.15,
+                    width: width * 0.88,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      // color: ConstantColor.backgroundColor.withOpacity(0.09),
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xffD136D4).withOpacity(0.09),
+                          const Color(0xff7652B2).withOpacity(0.3),
+                        ],
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: height * 0.02,
-                              horizontal: width * 0.02),
-                          padding: const EdgeInsets.all(8),
-                          height: height * 0.15,
-                          width: width * 0.88,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            // color: ConstantColor.backgroundColor.withOpacity(0.09),
-                            gradient: LinearGradient(
-                              colors: [
-                                const Color(0xffD136D4).withOpacity(0.09),
-                                const Color(0xff7652B2).withOpacity(0.3),
-                              ],
-                            ),
-                          ),
-                          child: SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            child: textWidget(
-                              height,
-                              allData[ind]['workDone'],
-                              height * 0.010,
-                            ),
-                          ),
-                        ),
-                        percentIndicator(
-                          height,
-                          double.parse(allData[ind]['workPercentage']
-                                  .replaceAll(RegExp(r'.$'), "")) /
-                              100,
-                          allData[ind]['workPercentage'],
-                          double.parse(allData[ind]['workPercentage']
-                                      .replaceAll(RegExp(r'.$'), "")) <
-                                  50
-                              ? Colors.black
-                              : ConstantColor.background1Color,
-                        ),
-                        SizedBox(
-                          height: height * 0.01,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            textWidget(
-                                height,
-                                'Start : ${allData[ind]['from']}',
-                                height * 0.010),
-                            textWidget(height, 'End : ${allData[ind]['to']}',
-                                height * 0.010),
-                            textWidget(
-                                height,
-                                'Percent : ${allData[ind]['workPercentage']}',
-                                height * 0.010),
-                          ],
-                        ),
-                      ],
+                    ),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: textWidget(
+                        height,
+                        allData[ind]['workDone'],
+                        height * 0.010,
+                      ),
                     ),
                   ),
-                )
+                  percentIndicator(
+                    height,
+                    double.parse(allData[ind]['workPercentage']
+                        .replaceAll(RegExp(r'.$'), "")) /
+                        100,
+                    allData[ind]['workPercentage'],
+                    double.parse(allData[ind]['workPercentage']
+                        .replaceAll(RegExp(r'.$'), "")) <
+                        50
+                        ? Colors.black
+                        : ConstantColor.background1Color,
+                  ),
+                  SizedBox(
+                    height: height * 0.01,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      textWidget(
+                          height,
+                          'Start : ${allData[ind]['from']}',
+                          height * 0.010),
+                      textWidget(height, 'End : ${allData[ind]['to']}',
+                          height * 0.010),
+                      textWidget(
+                          height,
+                          'Duration : ${allData[ind]['time_in_hours']}',
+                          height * 0.010),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
               : Container();
         });
   }
@@ -443,7 +418,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
       backgroundColor: Colors.black.withOpacity(0.05),
       // progressColor: Colors.cyan,
       linearGradient:
-          const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
+      const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
       center: Text(
         val,
         style: TextStyle(
