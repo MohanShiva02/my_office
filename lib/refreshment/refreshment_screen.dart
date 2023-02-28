@@ -101,11 +101,6 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                   ),
                 ),
               ),
-              // Text(
-              //   '34',
-              //   style: TextStyle(
-              //       fontFamily: ConstantFonts.poppinsRegular, fontSize: 15),
-              // )
             ],
           ),
         ),
@@ -207,17 +202,19 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
           //Checking whether already booked food or not
           if (foodList.isNotEmpty) {
-            isFoodBooked = foodList.containsValue(widget.name);
+            // isFoodBooked = foodList.containsValue(widget.name);
             foodCount = value['lunch_count'];
           }
 
-          if (isFoodBooked) {
-            showSnackBar(
-                message: 'You have already ordered your Food',
-                color: Colors.red);
-          } else {
-            bookFood(foodCount: foodCount, date: format);
-          }
+          // if (isFoodBooked) {
+          //   showSnackBar(
+          //       message: 'You have already ordered your Food',
+          //       color: Colors.red);
+          // } else {
+          //   bookFood(foodCount: foodCount, date: format);
+          // }
+
+          bookFood(foodCount: foodCount, date: format);
         } else {
           bookFood(foodCount: foodCount, date: format);
         }
@@ -246,29 +243,38 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
           //Checking for already ordered Tea or not
           if (teaList.isNotEmpty) {
-            isTeaOrdered = teaList.containsValue(widget.name);
+            // isTeaOrdered = teaList.containsValue(widget.name);
             teaCount = value['tea_count'];
           }
 
           //Checking for already ordered Coffee or not
           if (coffeeList.isNotEmpty) {
-            isCoffeeOrdered = coffeeList.containsValue(widget.name);
+            // isCoffeeOrdered = coffeeList.containsValue(widget.name);
             coffeeCount = value['coffee_count'];
           }
 
-          if (isTeaOrdered || isCoffeeOrdered) {
-            final item = isTeaOrdered ? 'Tea' : 'Coffee';
-            showSnackBar(
-                message: 'You have already submitted your $item',
-                color: Colors.red);
-          } else {
-            orderTeaOrCoffee(
-                item: item,
-                coffeeCount: coffeeCount,
-                teaCount: teaCount,
-                date: format,
-                mode: mode);
-          }
+          // if (isTeaOrdered || isCoffeeOrdered) {
+          //   final item = isTeaOrdered ? 'Tea' : 'Coffee';
+          //   showSnackBar(
+          //       message: 'You have already submitted your $item',
+          //       color: Colors.red);
+          // } else {
+          //   orderTeaOrCoffee(
+          //       item: item,
+          //       coffeeCount: coffeeCount,
+          //       teaCount: teaCount,
+          //       date: format,
+          //       mode: mode);
+          // }
+
+
+          orderTeaOrCoffee(
+              item: item,
+              coffeeCount: coffeeCount,
+              teaCount: teaCount,
+              date: format,
+              mode: mode);
+
         } else {
           orderTeaOrCoffee(
               item: item,
@@ -311,7 +317,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     DatabaseReference ref = FirebaseDatabase.instance.ref();
     if (item == 'Tea') {
       await ref.child('/refreshments/$date/$mode/tea').update({
-        'name${teaCount + 1}': widget.name,
+        'name${teaCount + 1 }': widget.name,
       });
 
       await ref.child('/refreshments/$date/$mode').update({
