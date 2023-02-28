@@ -4,6 +4,9 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/PR/visit/product_detail_screen.dart';
+import 'package:my_office/PR/visit/verification_screen.dart';
+import 'package:my_office/database/hive_operations.dart';
+import 'package:my_office/models/visit_model.dart';
 
 import '../../util/screen_template.dart';
 
@@ -283,20 +286,43 @@ class _VisitScreenState extends State<VisitScreen> {
   }
 
   Widget buildNextButton() {
-    return SizedBox(
-      height: 38.0,
-      width: 120.0,
-      child: ElevatedButton(
-          onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ProductDetailScreen()));
+    final size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () async {
+        final nav = Navigator.of(context);
+        final visitData = VisitModel(
+            dateTime: DateTime.now(),
+            customerPhoneNumber: phoneNumber,
+            customerName: customerData['name'].toString(),
+            stage: 'visitScreen');
 
-          },
-          style: ElevatedButton.styleFrom(
-              disabledBackgroundColor: ConstantColor.backgroundColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              backgroundColor: ConstantColor.backgroundColor),
-          child: const Text('Next')),
+        await HiveOperations().addVisitEntry(visit: visitData);
+        nav.push(MaterialPageRoute(
+            builder: (_) => VerificationScreen(
+                phone: phoneNumber, name: customerData['name'].toString())));
+      },
+      child: Container(
+        height: size.height * 0.07,
+        width: size.width * 0.9,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xffD136D4),
+              Color(0xff7652B2),
+            ],
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'Next',
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                fontSize: size.height * 0.025,
+                color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 
@@ -343,8 +369,8 @@ class _VisitScreenState extends State<VisitScreen> {
             color: color,
             child: Center(
                 child: Text(
-              message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
-            )))));
+                  message,
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                )))));
   }
 }

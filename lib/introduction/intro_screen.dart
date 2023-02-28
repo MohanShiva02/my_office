@@ -43,7 +43,7 @@ class IntroductionScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(
           vertical: height * 0.03, horizontal: width * 0.05),
-      height: height * 0.23,
+      height: height * 0.28,
       width: double.infinity,
       color: Colors.transparent,
       child: Column(

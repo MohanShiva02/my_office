@@ -11,6 +11,7 @@ import 'package:my_office/PR/visit/visit_form_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/refreshment/refreshment_screen.dart';
 import 'package:my_office/util/main_template.dart';
+import 'package:my_office/util/notification_services.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../database/hive_operations.dart';
@@ -30,6 +31,7 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
+  final NotificationService _notificationService = NotificationService();
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
@@ -60,6 +62,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void initState() {
     getConnectivity();
     getStaffDetail();
+    // _notificationService.showDailyNotification();
     super.initState();
   }
 
@@ -77,216 +80,221 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget buildMenuGrid(double height, double width) {
     return staffInfo != null
         ? staffInfo!.department == 'ADMIN'
-            ?GridView(
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 20.0),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                    mainAxisExtent: 230),
-                children: [
-                  buildButton(
-                      name: 'Refreshment',
-                      image: Image.asset(
-                        'assets/refreshment.png',
-                        scale: 3.8,
-                      ),
-                      page: RefreshmentScreen(
-                        uid: staffInfo!.uid,
-                        name: staffInfo!.name,
-                      )),
-                  buildButton(
-                      name: 'Work done',
-                      image: Image.asset(
-                        'assets/work_entry.png',
-                        scale: 3.5,
-                      ),
-                      page: WorkCompleteViewScreen(
-                        userDetails: staffInfo!,
-                      )),
-                  buildButton(
-                      name: 'Absent Details',
-                      image: Image.asset(
-                        'assets/lead search.png',
-                        scale: 3.0,
-                      ),
-                      page: const AbsenteeScreen()),
-                ],
-              )
-            :staffInfo!.department == 'PR'
-                ? GridView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 20.0),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                            mainAxisExtent: 230),
-                    children: [
-                      buildButton(
-                        name: 'Work Manager',
-                        image: Image.asset(
-                          'assets/work_entry.png',
-                          scale: 3.5,
-                        ),
-                        page: WorkEntryScreen(
-                          userId: staffInfo!.uid,
-                          staffName: staffInfo!.name,
-                        ),
-                      ),
-                      buildButton(
-                          name: 'Refreshment',
-                          image: Image.asset(
-                            'assets/refreshment.png',
-                            scale: 3.8,
-                          ),
-                          page: RefreshmentScreen(
-                            uid: staffInfo!.uid,
-                            name: staffInfo!.name,
-                          )),
-                      buildButton(
-                          name: 'Search leads',
-                          image: Image.asset('assets/leave_apply.png'),
-                          page: SearchLeadsScreen(staffInfo: staffInfo!)),
-                    ],
-                  )
-                : staffInfo!.department == 'APP'
-                    ? GridView(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 20.0),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10.0,
-                                mainAxisSpacing: 10.0,
-                                mainAxisExtent: 230),
-                        children: [
-                          buildButton(
-                            name: 'Work Manager',
-                            image: Image.asset(
-                              'assets/work_entry.png',
-                              scale: 3.5,
-                            ),
-                            page: WorkEntryScreen(
-                              userId: staffInfo!.uid,
-                              staffName: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                              name: 'Refreshment',
-                              image: Image.asset(
-                                'assets/refreshment.png',
-                                scale: 3.8,
-                              ),
-                              page: RefreshmentScreen(
-                                uid: staffInfo!.uid,
-                                name: staffInfo!.name,
-                              )),
-                          buildButton(
-                              name: 'Leave form',
-                              image: Image.asset('assets/leave_apply.png'),
-                              page: const LeaveApplyScreen()),
-                          buildButton(
-                              name: 'Onyx',
-                              image: Image.asset(
-                                'assets/onxy.png',
-                                scale: 3.4,
-                              ),
-                              page: const AnnouncementScreen()),
-                          buildButton(
-                              name: 'Work done',
-                              image: Image.asset(
-                                'assets/work_entry.png',
-                                scale: 3.5,
-                              ),
-                              page: WorkCompleteViewScreen(
-                                userDetails: staffInfo!,
-                              )),
-                          buildButton(
-                              name: 'Absent Details',
-                              image: Image.asset(
-                                'assets/lead search.png',
-                                scale: 3.0,
-                              ),
-                              page: const AbsenteeScreen()),
-                          buildButton(
-                            name: 'Search Leads',
-                            image: Image.asset(
-                              'assets/leave form.png',
-                              scale: 4.0,
-                            ),
-                            page: SearchLeadsScreen(staffInfo: staffInfo!),
-                          ),
-                          buildButton(
-                            name: 'Leave Request',
-                            image: Image.asset(
-                              'assets/leave form.png',
-                              scale: 4.0,
-                            ),
-                            page: const LeaveApprovalScreen(),
-                          ),
-                          buildButton(
-                            name: 'Visit',
-                            image: Image.asset(
-                              'assets/leave form.png',
-                              scale: 4.0,
-                            ),
-                            page: const VisitFromScreen(),
-                          ),
-                        ],
-                      )
-                    :GridView(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 20.0),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10.0,
-                                mainAxisSpacing: 10.0,
-                                mainAxisExtent: 230),
-                        children: [
-                          buildButton(
-                            name: 'Work Manager',
-                            image: Image.asset(
-                              'assets/work_entry.png',
-                              scale: 3.5,
-                            ),
-                            page: WorkEntryScreen(
-                              userId: staffInfo!.uid,
-                              staffName: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                              name: 'Refreshment',
-                              image: Image.asset(
-                                'assets/refreshment.png',
-                                scale: 3.8,
-                              ),
-                              page: RefreshmentScreen(
-                                uid: staffInfo!.uid,
-                                name: staffInfo!.name,
-                              )),
-                        ],
-                      )
-        : Center(
-            child: Lottie.asset(
-              "assets/animations/loading.json",
+        ? GridView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: 20.0),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          mainAxisExtent: 230),
+      children: [
+        buildButton(
+            name: 'Refreshment',
+            image: Image.asset(
+              'assets/refreshment.png',
+              scale: 3.8,
             ),
-          );
+            page: RefreshmentScreen(
+              uid: staffInfo!.uid,
+              name: staffInfo!.name,
+            )),
+        buildButton(
+            name: 'Work done',
+            image: Image.asset(
+              'assets/work_entry.png',
+              scale: 3.5,
+            ),
+            page: WorkCompleteViewScreen(
+              userDetails: staffInfo!,
+            )),
+        buildButton(
+            name: 'Absent Details',
+            image: Image.asset(
+              'assets/lead search.png',
+              scale: 3.0,
+            ),
+            page: const AbsenteeScreen()),
+      ],
+    )
+        : staffInfo!.department == 'PR'
+        ? GridView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: 20.0),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      gridDelegate:
+      const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          mainAxisExtent: 230),
+      children: [
+        buildButton(
+          name: 'Work Manager',
+          image: Image.asset(
+            'assets/work_entry.png',
+            scale: 3.5,
+          ),
+          page: WorkEntryScreen(
+            userId: staffInfo!.uid,
+            staffName: staffInfo!.name,
+          ),
+        ),
+        buildButton(
+            name: 'Refreshment',
+            image: Image.asset(
+              'assets/refreshment.png',
+              scale: 3.8,
+            ),
+            page: RefreshmentScreen(
+              uid: staffInfo!.uid,
+              name: staffInfo!.name,
+            )),
+        buildButton(
+            name: 'Search leads',
+            image: Image.asset('assets/leave_apply.png'),
+            page: SearchLeadsScreen(staffInfo: staffInfo!)),
+      ],
+    )
+        : staffInfo!.department == 'APP'
+        ? GridView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: 20.0),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      gridDelegate:
+      const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          mainAxisExtent: 230),
+      children: [
+        buildButton(
+          name: 'Work Manager',
+          image: Image.asset(
+            'assets/work_entry.png',
+            scale: 3.5,
+          ),
+          page: WorkEntryScreen(
+            userId: staffInfo!.uid,
+            staffName: staffInfo!.name,
+          ),
+        ),
+        buildButton(
+            name: 'Refreshment',
+            image: Image.asset(
+              'assets/refreshment.png',
+              scale: 3.8,
+            ),
+            page: RefreshmentScreen(
+              uid: staffInfo!.uid,
+              name: staffInfo!.name,
+            )),
+        buildButton(
+            name: 'Leave form',
+            image: Image.asset('assets/leave_apply.png'),
+            page: const LeaveApplyScreen()),
+        buildButton(
+            name: 'Onyx',
+            image: Image.asset(
+              'assets/onxy.png',
+              scale: 3.4,
+            ),
+            page: const AnnouncementScreen()),
+        buildButton(
+            name: 'Work done',
+            image: Image.asset(
+              'assets/work_entry.png',
+              scale: 3.5,
+            ),
+            page: WorkCompleteViewScreen(
+              userDetails: staffInfo!,
+            )),
+        buildButton(
+            name: 'Absent Details',
+            image: Image.asset(
+              'assets/lead search.png',
+              scale: 3.0,
+            ),
+            page: const AbsenteeScreen()),
+        buildButton(
+          name: 'Search Leads',
+          image: Image.asset(
+            'assets/leave form.png',
+            scale: 4.0,
+          ),
+          page: SearchLeadsScreen(staffInfo: staffInfo!),
+        ),
+        buildButton(
+          name: 'Leave Request',
+          image: Image.asset(
+            'assets/leave form.png',
+            scale: 4.0,
+          ),
+          page: const LeaveApprovalScreen(),
+        ),
+        buildButton(
+          name: 'Visit',
+          image: Image.asset(
+            'assets/leave form.png',
+            scale: 4.0,
+          ),
+          page: const VisitFromScreen(),
+        ),
+        ElevatedButton(onPressed: ()async{
+          await HiveOperations().clearPREntry();
+        }, child: Text('Delete PR DISK'))
+
+
+      ],
+    )
+        : GridView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: 20.0),
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      gridDelegate:
+      const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.0,
+          mainAxisSpacing: 10.0,
+          mainAxisExtent: 230),
+      children: [
+        buildButton(
+          name: 'Work Manager',
+          image: Image.asset(
+            'assets/work_entry.png',
+            scale: 3.5,
+          ),
+          page: WorkEntryScreen(
+            userId: staffInfo!.uid,
+            staffName: staffInfo!.name,
+          ),
+        ),
+        buildButton(
+            name: 'Refreshment',
+            image: Image.asset(
+              'assets/refreshment.png',
+              scale: 3.8,
+            ),
+            page: RefreshmentScreen(
+              uid: staffInfo!.uid,
+              name: staffInfo!.name,
+            )),
+      ],
+    )
+        : Center(
+      child: Lottie.asset(
+        "assets/animations/loading.json",
+      ),
+    );
   }
 
   Widget buildButton(
@@ -335,7 +343,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 isAlertSet = false;
               });
               isDeviceConnected =
-                  await InternetConnectionChecker().hasConnection;
+              await InternetConnectionChecker().hasConnection;
               if (!isDeviceConnected) {
                 showDialogBox();
                 setState(() {

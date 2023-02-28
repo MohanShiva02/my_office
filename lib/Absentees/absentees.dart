@@ -70,12 +70,12 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
 
   getAbsentsName() {
+
     notEntry.clear();
     fingerPrint.once().then((value) {
       for (var val in value.snapshot.children) {
-        if (val.value.runtimeType
-            .toString()
-            .contains("_InternalLinkedHashMap<Object?, Object?>")) {
+        if (val.value.runtimeType.toString().contains("_Map<Object?, Object?>")) {
+
           firebaseData = val.value;
           notEntry.add(firebaseData['name']);
           for (var val1 in val.children) {
@@ -83,6 +83,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
               if (!mounted) return;
               setState(() {
                 notEntry.remove(firebaseData['name']);
+                notEntry.removeWhere((value) => value == null);
               });
             }
           }
@@ -127,9 +128,9 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   }
 
   Widget bodyContent(
-    double height,
-    double width,
-  ) {
+      double height,
+      double width,
+      ) {
     return Stack(
       children: [
         /// Grid View
@@ -140,49 +141,49 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
           bottom: height * 0.01,
           child: notEntry.isEmpty
               ? Center(
-                  child: Lottie.asset(
-                    "assets/animations/loading.json",
-                  ),
-                )
+            child: Lottie.asset(
+              "assets/animations/loading.json",
+            ),
+          )
               : GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    // mainAxisSpacing: 1 / 0.1,
-                    mainAxisExtent: 7.5 / 0.1,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                // mainAxisSpacing: 1 / 0.1,
+                mainAxisExtent: 7.5 / 0.1,
+              ),
+              itemCount: notEntry.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  // height: height * 0.1,
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: ConstantColor.background1Color,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(-0.0, 5.0),
+                        blurRadius: 8,
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(11),
                   ),
-                  itemCount: notEntry.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      // height: height * 0.1,
-                      margin: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: ConstantColor.background1Color,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            offset: const Offset(-0.0, 5.0),
-                            blurRadius: 8,
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(11),
-                      ),
-                      child: Center(
-                        child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: ConstantColor.backgroundColor,
-                              child: Icon(Icons.person),
-                            ),
-                            title: Text(
-                              '${notEntry[index]}',
-                              style: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsMedium,
-                                  color: ConstantColor.blackColor,
-                                  fontSize: height * 0.020),
-                            )),
-                      ),
-                    );
-                  }),
+                  child: Center(
+                    child: ListTile(
+                        leading: const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: ConstantColor.backgroundColor,
+                          child: Icon(Icons.person),
+                        ),
+                        title: Text(
+                          notEntry[index],
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              color: ConstantColor.blackColor,
+                              fontSize: height * 0.020),
+                        )),
+                  ),
+                );
+              }),
         ),
 
         /// Date Picker

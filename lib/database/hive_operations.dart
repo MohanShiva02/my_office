@@ -5,9 +5,7 @@ import '../models/visit_model.dart';
 
 ValueNotifier<List<VisitModel>> prVisits = ValueNotifier([]);
 
-
-class HiveOperations with ChangeNotifier{
-
+class HiveOperations with ChangeNotifier {
   Future<void> addStaffDetail({required StaffModel staff}) async {
     final userDB = await Hive.openBox<StaffModel>('user_db');
     await userDB.add(staff);
@@ -26,9 +24,47 @@ class HiveOperations with ChangeNotifier{
   }
 
   //ADDING DATA FOR PR VISIT
-Future<void> addVisitEntry({required String phoneNumber}) async {
-  final userDB = await Hive.openBox<StaffModel>('pr_db');
-}
-}
+  Future<void> addVisitEntry({required VisitModel visit}) async {
+    final userDB = await Hive.openBox<VisitModel>('pr_db');
+    final isAdded = userDB.containsKey(visit.customerPhoneNumber);
+    if (!isAdded) {
+      await userDB.put(visit.customerPhoneNumber, visit);
+      prVisits.value.add(visit);
+      prVisits.notifyListeners();
+    }
+  }
 
+  //UPDATE PR VISIT ENTRY
+  Future<void> updateVisitEntry({required VisitModel newVisitEntry}) async {
+    final userDB = await Hive.openBox<VisitModel>('pr_db');
+    int lastIndex = userDB.length - 1;
+    if (lastIndex < 0) return;
+    await userDB.delete(newVisitEntry.customerPhoneNumber);
+    await userDB.put(newVisitEntry.customerPhoneNumber, newVisitEntry);
+    getVisitEntry();
+  }
 
+  //GETTING DATA FOR PR VISIT
+  Future<void> getVisitEntry() async {
+    final userDB = await Hive.openBox<VisitModel>('pr_db');
+
+    prVisits.value.clear();
+    prVisits.value.addAll(userDB.values);
+    prVisits.notifyListeners();
+  }
+
+  //DELETE ONE DATA FROM PR VISIT
+  Future<void> deleteVisitEntry({required String phoneNumber}) async {
+    final userDB = await Hive.openBox<VisitModel>('pr_db');
+    userDB.delete(phoneNumber);
+    getVisitEntry();
+  }
+
+  //CLEARING DATA FOR PR VISIT DB
+  Future<void> clearPREntry() async {
+    final userDB = await Hive.openBox<VisitModel>('pr_db');
+    await userDB.deleteFromDisk();
+    prVisits.value.clear();
+    prVisits.notifyListeners();
+  }
+}

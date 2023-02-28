@@ -17,55 +17,46 @@ class VisitModelAdapter extends TypeAdapter<VisitModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return VisitModel(
-      date: fields[0] as String,
-      time: fields[1] as String,
-      customerPhoneNumber: fields[2] as String,
+      dateTime: fields[0] as DateTime,
+      customerPhoneNumber: fields[1] as String,
+      customerName: fields[2] as String,
+      stage: fields[9] as String,
+      startKm: fields[5] as int?,
       prDetails: (fields[3] as List?)
-          ?.map((dynamic e) => (e as Map).map((dynamic k, dynamic v) =>
-              MapEntry(k as String, (v as List).cast<Uint8List>())))
+          ?.map((dynamic e) => (e as Map).map(
+              (dynamic k, dynamic v) => MapEntry(k as String, v as Uint8List)))
           .toList(),
       startKmImage: fields[4] as Uint8List?,
-      endKmImage: fields[5] as Uint8List?,
-      totalKm: fields[6] as String?,
-      productName: (fields[7] as List?)?.cast<String>(),
-      productImage: fields[8] as Uint8List?,
-      invoiceNumber: fields[10] as String?,
-      quotationNumber: fields[9] as String?,
-      dateOfInstallation: fields[12] as String?,
-      note: fields[11] as String?,
+      productName: (fields[6] as List?)?.cast<String>(),
+      productImage: (fields[7] as List?)?.cast<Uint8List>(),
+      quotationInvoiceNumber: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, VisitModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(10)
       ..writeByte(0)
-      ..write(obj.date)
+      ..write(obj.dateTime)
       ..writeByte(1)
-      ..write(obj.time)
-      ..writeByte(2)
       ..write(obj.customerPhoneNumber)
+      ..writeByte(2)
+      ..write(obj.customerName)
       ..writeByte(3)
       ..write(obj.prDetails)
       ..writeByte(4)
       ..write(obj.startKmImage)
       ..writeByte(5)
-      ..write(obj.endKmImage)
+      ..write(obj.startKm)
       ..writeByte(6)
-      ..write(obj.totalKm)
-      ..writeByte(7)
       ..write(obj.productName)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.productImage)
+      ..writeByte(8)
+      ..write(obj.quotationInvoiceNumber)
       ..writeByte(9)
-      ..write(obj.quotationNumber)
-      ..writeByte(10)
-      ..write(obj.invoiceNumber)
-      ..writeByte(11)
-      ..write(obj.note)
-      ..writeByte(12)
-      ..write(obj.dateOfInstallation);
+      ..write(obj.stage);
   }
 
   @override

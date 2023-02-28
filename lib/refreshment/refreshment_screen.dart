@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/refreshment/refreshment_details.dart';
@@ -136,14 +137,44 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
               item: 'Food'),
 
         if (!isMngTea && !isEvgTea)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
-              'Selection will display according to time only. Come and visit again!',
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
-              textAlign: TextAlign.center,
-            ),
-          )
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Lottie.asset('assets/animations/Time anime.json'),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Text(
+                'Refreshment is coming, Wait until it arrives..',
+                style: TextStyle(
+                  color: Colors.deepPurple,
+                  fontFamily: ConstantFonts.poppinsBold,
+                  fontSize: 17,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Morning Refreshment & Food Time : 9.30 AM to 11.00 AM',
+                style: TextStyle(
+                  color: Colors.deepPurple,
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontSize: 15,
+                ),
+              ),
+              Text(
+                'Evening Refreshment Time : 1.30 PM to 3.30 PM',
+                style: TextStyle(
+                  color: Colors.deepPurple,
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontSize: 15,
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }
@@ -267,14 +298,12 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
           //       mode: mode);
           // }
 
-
           orderTeaOrCoffee(
               item: item,
               coffeeCount: coffeeCount,
               teaCount: teaCount,
               date: format,
               mode: mode);
-
         } else {
           orderTeaOrCoffee(
               item: item,
@@ -317,7 +346,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     DatabaseReference ref = FirebaseDatabase.instance.ref();
     if (item == 'Tea') {
       await ref.child('/refreshments/$date/$mode/tea').update({
-        'name${teaCount + 1 }': widget.name,
+        'name${teaCount + 1}': widget.name,
       });
 
       await ref.child('/refreshments/$date/$mode').update({

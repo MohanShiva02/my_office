@@ -1,19 +1,32 @@
+import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
+import 'package:my_office/PR/visit/summary_notes.dart';
+import 'package:my_office/database/hive_operations.dart';
+import 'package:my_office/models/visit_model.dart';
 import 'package:my_office/util/screen_template.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key}) : super(key: key);
+  final VisitModel visiData;
+
+  const ProductDetailScreen({Key? key, required this.visiData})
+      : super(key: key);
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  final TextEditingController _invoiceController = TextEditingController();
-  final TextEditingController _quotationController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
+  List<File> productImages = [];
+  List<Uint8List> productImagesBytes = [];
+  List<String> selectedProducts = [];
+
   Map<String, bool> products = {
     'Smart Home': false,
     'Gate': false,
@@ -25,13 +38,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   void dispose() {
-    _invoiceController.dispose();
-    _quotationController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return ScreenTemplate(bodyTemplate: buildScreen(), title: 'Product Detail');
   }
 
@@ -44,15 +57,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               height: MediaQuery.of(context).size.height * .35,
               child: buildProductSelection()),
           const Divider(height: 0.0),
-          Container(
-              margin:
-                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-              child: buildQuotationInvoice()),
+          buildQuotation(),
           const Divider(height: 0.0),
-          Container(
-              margin: const EdgeInsets.symmetric(vertical: 15.0),
-              child: buildProductImage()),
-          const SizedBox(height: 30.0),
+          buildProductImage(),
           buildNextButton(),
         ],
       ),
@@ -85,6 +92,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   onChanged: (data) {
                     setState(() {
                       products.update(key, (value) => data!);
+                      if (data == true) {
+                        selectedProducts.add(key);
+                      } else {
+                        if (selectedProducts.contains(key)) {
+                          selectedProducts.remove(key);
+                        }
+                      }
                     });
                   },
                 ),
@@ -96,127 +110,176 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget buildProductImage() {
+  Widget buildQuotation() {
+    final size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Column(
         children: [
-          CircleAvatar(
-              backgroundColor: ConstantColor.backgroundColor,
-              radius: 20.0,
-              child: IconButton(
-                  onPressed: () {
-                    HapticFeedback.heavyImpact();
-                    uploadProductImage();
-                  },
-                  icon: const Icon(
-                    Icons.photo_camera_rounded,
-                    color: Colors.white,
-                    size: 20.0,
-                  ))),
-          Text(
-            'Upload product image',
-            style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, fontSize: 15.0),
+          SizedBox(
+            height: size.height * .05,
+            width: size.width * .65,
+            child: ElevatedButton(
+                onPressed: () async {
+                  await LaunchApp.openApp(
+                    androidPackageName: 'com.onwords.invoice_app',
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff8355B7)),
+                child: const Text('Generate Quotation/Invoice')),
           ),
+          const Text(
+            'or',
+            style: TextStyle(color: Colors.grey),
+          ),
+          SizedBox(
+              height: size.height * .06,
+              width: size.width * .65,
+              child: TextField(
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    hintText: 'Quotation/Invoice number',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.grey.withOpacity(.3),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(
+                        width: 1.5,
+                        color: Colors.purple,
+                      ),
+                    ),
+                  ))),
         ],
       ),
     );
   }
 
-  Widget buildQuotationInvoice() {
+  Widget buildProductImage() {
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height * .25,
+      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          border: Border.all(width: 1, color: Colors.grey)),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: productImages.isEmpty
+          ? firstImageInsertion()
+          : multipleImageInsertion(),
+    );
+  }
+
+  Widget multipleImageInsertion() {
     return Column(
       children: [
-        //invoice
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Invoice'),
-            const SizedBox(width: 20.0),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * .65,
-              child: TextField(
-                  controller: _invoiceController,
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    hintText: 'Invoice number',
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.grey.withOpacity(.3),
-                      ),
+        CupertinoButton(
+            onPressed: () {
+              uploadProductImage();
+            },
+            padding: const EdgeInsets.all(0.0),
+            child: Text(
+              'Add image',
+              style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontSize: 15.0,
+                  color: const Color(0xff8355B7)),
+            )),
+        Expanded(
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+              ),
+              itemCount: productImages.length,
+              itemBuilder: (ctx, i) {
+                return Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.grey),
+                      borderRadius: BorderRadius.circular(15.0)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15.0),
+                    child: Image.file(
+                      productImages[i],
+                      fit: BoxFit.cover,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        width: 1.5,
-                        color: Colors.purple,
-                      ),
-                    ),
-                  )),
-            )
-          ],
+                  ),
+                );
+              },
+            )),
+      ],
+    );
+  }
+
+  Widget firstImageInsertion() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircleAvatar(
+            backgroundColor: ConstantColor.backgroundColor,
+            radius: 20.0,
+            child: IconButton(
+                onPressed: () {
+                  HapticFeedback.heavyImpact();
+                  uploadProductImage();
+                },
+                icon: const Icon(
+                  Icons.photo_camera_rounded,
+                  color: Colors.white,
+                  size: 20.0,
+                ))),
+        const SizedBox(height: 20.0),
+        Text(
+          'Upload product image',
+          style: TextStyle(
+              fontFamily: ConstantFonts.poppinsMedium, fontSize: 15.0),
         ),
-        const SizedBox(height: 10.0),
-        //quotation
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Quotation'),
-            const SizedBox(width: 20.0),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * .65,
-              child: TextField(
-                  controller: _quotationController,
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    hintText: 'Quotation number',
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.grey.withOpacity(.3),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        width: 1.5,
-                        color: Colors.purple,
-                      ),
-                    ),
-                  )),
-            )
-          ],
-        )
       ],
     );
   }
 
   Widget buildNextButton() {
-    return SizedBox(
-      height: 38.0,
-      width: 120.0,
-      child: ElevatedButton(
-          onPressed: () {
-            // Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ProductDetailScreen()));
-          },
-          style: ElevatedButton.styleFrom(
-              disabledBackgroundColor: ConstantColor.backgroundColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              backgroundColor: ConstantColor.backgroundColor),
-          child: const Text('Next')),
+    final size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: submitProductDetailScreen,
+      child: Container(
+        height: size.height * 0.07,
+        width: size.width * 0.9,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xffD136D4),
+              Color(0xff7652B2),
+            ],
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'Next',
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                fontSize: size.height * 0.025,
+                color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 
   //Dialog bottom
   void uploadProductImage() {
+    final size = MediaQuery.of(context).size;
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -239,24 +302,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: InkWell(
                   onTap: () async {
                     Navigator.of(ctx).pop();
+                    await ImagePicker()
+                        .pickImage(
+                      source: ImageSource.gallery,
+                    )
+                        .then((pickedImage) async {
+                      if (pickedImage == null) return;
+                      setState(() {
+                        productImages.add(File(pickedImage.path));
+                      });
+                    });
                   },
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     topRight: Radius.circular(20),
                   ),
                   child: SizedBox(
-                    height: 70,
+                    height: size.height * 0.09,
                     child: Row(
-                      children: const [
-                        SizedBox(width: 10),
-                        Icon(Icons.photo_library_rounded,
+                      children: [
+                        SizedBox(width: size.width * 0.05),
+                        const Icon(Icons.photo_library_rounded,
                             color: Color(0xff8355B7)),
-                        SizedBox(width: 15),
+                        SizedBox(width: size.width * 0.05),
                         Text(
                           "Choose from library",
                           style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsMedium,
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -269,18 +342,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 child: InkWell(
                   onTap: () async {
                     Navigator.of(ctx).pop();
+                    await ImagePicker()
+                        .pickImage(
+                      source: ImageSource.camera,
+                    )
+                        .then((pickedImage) async {
+                      if (pickedImage == null) return;
+                      setState(() {
+                        productImages.add(File(pickedImage.path));
+                      });
+                    });
                   },
                   child: SizedBox(
-                    height: 70,
+                    height: size.height * 0.09,
                     child: Row(
-                      children: const [
-                        SizedBox(width: 10),
-                        Icon(Icons.camera_alt_rounded,
+                      children: [
+                        SizedBox(width: size.width * 0.05),
+                        const Icon(Icons.camera_alt_rounded,
                             color: Color(0xff8355B7)),
-                        SizedBox(width: 15),
+                        SizedBox(width: size.width * 0.05),
                         Text(
                           "Take photo",
                           style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsMedium,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -295,5 +379,59 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       },
     );
+  }
+
+  Future<void> submitProductDetailScreen() async {
+    final nav = Navigator.of(context);
+
+    if (selectedProducts.isEmpty) {
+      showSnackBar(
+          message: 'Please select at least one product', color: Colors.red);
+    } else if (productImages.isEmpty) {
+      showSnackBar(message: 'Please upload product image', color: Colors.red);
+    }else if (_textController.text.isEmpty) {
+      showSnackBar(message: 'Please enter quotation or invoice number', color: Colors.red);
+    } else {
+      //converting selected images into Uint8list to store in local db
+      if (productImages.length > productImagesBytes.length) {
+        productImagesBytes.clear();
+        for (var i in productImages) {
+          File file = File(i.path);
+          productImagesBytes.add(file.readAsBytesSync());
+        }
+      }
+
+      final visitData = VisitModel(
+          dateTime: DateTime.now(),
+          customerPhoneNumber: widget.visiData.customerPhoneNumber,
+          customerName: widget.visiData.customerName,
+          startKmImage: widget.visiData.startKmImage,
+          startKm: widget.visiData.startKm,
+          prDetails: widget.visiData.prDetails,
+          productName: selectedProducts,
+          productImage: productImagesBytes,
+          quotationInvoiceNumber: _textController.value.text,
+          stage: 'productScreen');
+      await HiveOperations().updateVisitEntry(newVisitEntry: visitData);
+
+      nav.push(MaterialPageRoute(
+          builder: (_) => SummaryAndNotes(visitInfo: visitData)));
+    }
+  }
+
+  void showSnackBar({required String message, required Color color}) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        padding: const EdgeInsets.all(0.0),
+        content: Container(
+            height: 50.0,
+            color: color,
+            child: Center(
+                child: Text(
+                  message,
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                )))));
   }
 }

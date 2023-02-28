@@ -11,9 +11,9 @@ class CustomerDetailScreen extends StatefulWidget {
 
   const CustomerDetailScreen(
       {Key? key,
-      required this.customerInfo,
-      required this.containerColor,
-      required this.nobColor})
+        required this.customerInfo,
+        required this.containerColor,
+        required this.nobColor})
       : super(key: key);
 
   @override
@@ -64,9 +64,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         //Customer notes section
         Expanded(
             child: SizedBox(
-          width: size.width,
-          child: buildNotes()
-        )),
+                width: size.width,
+                child: buildNotes()
+            )),
       ],
     );
   }
@@ -154,7 +154,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               itemCount: noteKeys.length,
               itemBuilder: (ctx, i) {
                 final Map<Object?, Object?> singleNote =
-                    allNotes[noteKeys[i]] as Map<Object?, Object?>;
+                allNotes[noteKeys[i]] as Map<Object?, Object?>;
 
                 final name = singleNote['entered_by'] ?? 'Not mentioned';
                 final date = singleNote['date'] ?? 'Not mentioned';
@@ -187,7 +187,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         child: Text(
           field,
           style:
-              TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
+          TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
         ),
       ),
       contents: Container(

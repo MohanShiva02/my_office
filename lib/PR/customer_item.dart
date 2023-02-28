@@ -18,14 +18,14 @@ class CustomerItem extends StatelessWidget {
     if (customerInfo['notes'] != null) {
       //Getting all notes from customer data
       final Map<Object?, Object?> allNotes =
-          customerInfo['notes'] as Map<Object?, Object?>;
+      customerInfo['notes'] as Map<Object?, Object?>;
       final noteKeys = allNotes.keys.toList();
 
       //Checking if key is empty or not
       if (noteKeys.isNotEmpty) {
         noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
         final Map<Object?, Object?> firstNote =
-            allNotes[noteKeys[0]] as Map<Object?, Object?>;
+        allNotes[noteKeys[0]] as Map<Object?, Object?>;
         lastNote = firstNote['note'].toString();
         lastNoteDate = firstNote['date'].toString();
       }
@@ -171,9 +171,9 @@ class CustomerItem extends StatelessWidget {
 
   Widget buildField(
       {required String field,
-      required String value,
-      required Color nobColor,
-      required Size size}) {
+        required String value,
+        required Color nobColor,
+        required Size size}) {
     return TimelineTile(
       nodePosition: .35,
       oppositeContents: Container(
@@ -182,7 +182,7 @@ class CustomerItem extends StatelessWidget {
         child: Text(
           field,
           style:
-              TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
+          TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
         ),
       ),
       contents: Container(

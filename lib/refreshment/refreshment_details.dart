@@ -246,7 +246,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                   fontSize: 26.0,
                   fontFamily: ConstantFonts.poppinsMedium)),
           Container(
-            height: MediaQuery.of(context).size.height * .18,
+            height: MediaQuery.of(context).size.height * .14,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,7 +292,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                   fontSize: 26.0,
                   fontFamily: ConstantFonts.poppinsMedium)),
           Container(
-            height: MediaQuery.of(context).size.height * .18,
+            height: MediaQuery.of(context).size.height * .12,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -338,7 +338,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                   fontSize: 26.0,
                   fontFamily: ConstantFonts.poppinsMedium)),
           Container(
-            height: MediaQuery.of(context).size.height * .18,
+            height: MediaQuery.of(context).size.height * .16,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

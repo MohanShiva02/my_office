@@ -10,10 +10,10 @@ class NoteItem extends StatelessWidget {
 
   const NoteItem(
       {Key? key,
-      required this.note,
-      required this.updatedDate,
-      required this.updatedStaff,
-      required this.updatedTime})
+        required this.note,
+        required this.updatedDate,
+        required this.updatedStaff,
+        required this.updatedTime})
       : super(key: key);
 
   @override
@@ -59,7 +59,7 @@ class NoteItem extends StatelessWidget {
               )
             ],
           ),
-         const  Divider(height: 0.0),
+          const  Divider(height: 0.0),
           //body
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
