@@ -9,6 +9,7 @@ import 'package:my_office/firebase_options.dart';
 import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/util/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'introduction/intro_screen.dart';
@@ -17,7 +18,7 @@ import 'models/visit_model.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
+      options: DefaultFirebaseOptions.currentPlatform
   );
 
   //Hive database Setup
@@ -32,14 +33,26 @@ void main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]).then(
-    (value) => runApp(
+        (value) => runApp(
       const MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    NotificationService().initNotification();
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override

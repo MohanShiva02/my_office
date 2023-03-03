@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
-import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/refreshment/refreshment_details.dart';
 import 'package:my_office/util/custom_rect_tween.dart';
 import 'package:my_office/util/hero_dialog_route.dart';
@@ -32,9 +31,9 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
   void checkMorningTime() {
     final mngStart = DateTime(
-        currentDateTime.year, currentDateTime.month, currentDateTime.day, 9, 0);
+        currentDateTime.year, currentDateTime.month, currentDateTime.day, 9, 30);
     final mngEnd = DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 11, 30);
+        currentDateTime.day, 11, 0);
     if (currentDateTime.isBefore(mngEnd) && currentDateTime.isAfter(mngStart)) {
       setState(() {
         isMngTea = true;
@@ -102,6 +101,11 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                   ),
                 ),
               ),
+              // Text(
+              //   '34',
+              //   style: TextStyle(
+              //       fontFamily: ConstantFonts.poppinsRegular, fontSize: 15),
+              // )
             ],
           ),
         ),
@@ -137,44 +141,30 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
               item: 'Food'),
 
         if (!isMngTea && !isEvgTea)
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Lottie.asset('assets/animations/Time anime.json'),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Text(
-                'Refreshment is coming, Wait until it arrives..',
-                style: TextStyle(
-                  color: Colors.deepPurple,
-                  fontFamily: ConstantFonts.poppinsBold,
-                  fontSize: 17,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: [
+                Lottie.asset('assets/animations/Time anime.json',height: 200),
+                const SizedBox(height: 15.0),
+                Text(
+                  'Wait until refreshment portal opens...',
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsBold,color: Colors.deepPurple,fontSize: 16.0),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Morning Refreshment & Food Time : 9.30 AM to 11.00 AM',
-                style: TextStyle(
-                  color: Colors.deepPurple,
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  fontSize: 15,
+                const SizedBox(height: 25.0),
+                Text(
+                  'Morning refreshment and food time: 9:30 AM - 11:00 AM',
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.deepPurple,fontSize: 12.0),
+                  textAlign: TextAlign.center,
+                ),Text(
+                  'Evening refreshment time: 1:30 PM - 3:30 PM',
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.deepPurple,fontSize: 12.0),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              Text(
-                'Evening Refreshment Time : 1.30 PM to 3.30 PM',
-                style: TextStyle(
-                  color: Colors.deepPurple,
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  fontSize: 15,
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          )
       ],
     );
   }
@@ -183,7 +173,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
       bottom: 10.0,
       child: Image.asset(
         'assets/man_with_laptop.png',
-        scale: 5.0,
+   height: MediaQuery.of(context).size.height*.25,
       ));
 
   Widget buildSlider({
@@ -304,6 +294,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
               teaCount: teaCount,
               date: format,
               mode: mode);
+
         } else {
           orderTeaOrCoffee(
               item: item,

@@ -4,8 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/animate.dart';
-import 'package:flutter_animate/effects/fade_effect.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -75,7 +74,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     workDoneList.clear();
     staff
         .child(
-        "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate")
+            "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate")
         .once()
         .then((value) {
       for (var loop in value.snapshot.children) {
@@ -104,7 +103,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   createNewWork() {
     staff
         .child(
-        "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} to ${timeOfEnd.toString().trim()}")
+            "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} to ${timeOfEnd.toString().trim()}")
         .set({
       "from": timeOfStart.toString().trim(),
       "to": timeOfEnd.toString().trim(),
@@ -131,7 +130,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     if (!mounted) return;
     if (pickedTime != null) {
       DateTime parsedTime =
-      DateFormat.jm().parse(pickedTime.format(context).toString());
+          DateFormat.jm().parse(pickedTime.format(context).toString());
 
       ///converting to DateTime so that we can further format on different pattern.
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
@@ -154,7 +153,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     if (!mounted) return;
     if (pickedTime != null) {
       DateTime parsedTime =
-      DateFormat.jm().parse(pickedTime.format(context).toString());
+          DateFormat.jm().parse(pickedTime.format(context).toString());
 
       ///converting to DateTime so that we can further format on different pattern.
       // String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
@@ -333,7 +332,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                         startTime();
                       },
                       colorValue:
-                      timeOfStart.toString().isEmpty ? a = false : a = true,
+                          timeOfStart.toString().isEmpty ? a = false : a = true,
                       icon: const Icon(Icons.alarm),
                       val: "${timeOfStart!.isEmpty ? '--' : timeOfStart}"),
                   ButtonWidget(
@@ -342,7 +341,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                         endTime();
                       },
                       colorValue:
-                      timeOfEnd.toString().isEmpty ? b = false : b = true,
+                          timeOfEnd.toString().isEmpty ? b = false : b = true,
                       icon: const Icon(Icons.alarm),
                       val: "${timeOfEnd!.isEmpty ? '--' : timeOfEnd}"),
                   GestureDetector(
@@ -374,8 +373,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                   fontWeight: FontWeight.w900,
                                   fontSize: 16,
                                   color: Colors.black54
-                                // (0xffFBF8FF)
-                              ),
+                                  // (0xffFBF8FF)
+                                  ),
                               contentPadding: const EdgeInsets.all(20),
                               hintText: '       Percent of Completed',
                               filled: true,
@@ -395,7 +394,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                           btnOkColor: Colors.black87,
                           btnOkText: 'Done',
                           buttonsTextStyle: TextStyle(
-                            // color: ConstantColor.blackColor,
+                              // color: ConstantColor.blackColor,
                               fontWeight: FontWeight.w900,
                               fontFamily: ConstantFonts.poppinsMedium),
                           btnOkOnPress: () {
@@ -528,94 +527,94 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
     return workDoneList.isNotEmpty
         ? GridView.builder(
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          childAspectRatio: 3 / 1.8,
-        ),
-        itemCount: workDoneList.length,
-        itemBuilder: (BuildContext ctx, index) {
-          return Container(
-            // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: ConstantColor.background1Color,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  offset: const Offset(-0.0, 5.0),
-                  blurRadius: 8,
-                )
-              ],
-              borderRadius: BorderRadius.circular(11),
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: 3 / 1.8,
             ),
-            child: Column(
-              children: [
-                /// Work Details Container...
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: height * 0.02),
-                  padding: const EdgeInsets.all(8),
-                  height: height * 0.10,
-                  width: width * 0.88,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: ConstantColor.backgroundColor.withOpacity(0.09),
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xffD136D4).withOpacity(0.09),
-                        const Color(0xff7652B2).withOpacity(0.3),
+            itemCount: workDoneList.length,
+            itemBuilder: (BuildContext ctx, index) {
+              return Container(
+                // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: ConstantColor.background1Color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: const Offset(-0.0, 5.0),
+                      blurRadius: 8,
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: Column(
+                  children: [
+                    /// Work Details Container...
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: height * 0.02),
+                      padding: const EdgeInsets.all(8),
+                      height: height * 0.10,
+                      width: width * 0.88,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        // color: ConstantColor.backgroundColor.withOpacity(0.09),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xffD136D4).withOpacity(0.09),
+                            const Color(0xff7652B2).withOpacity(0.3),
+                          ],
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: textWidget(
+                          height,
+                          workDoneList[index],
+                          height * 0.02,
+                        ),
+                      ),
+                    ),
+
+                    /// Time....
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        textWidget(height, 'Start : ${startTimeList[index]}',
+                            height * 0.020),
+                        textWidget(height, 'End : ${endTimeList[index]}',
+                            height * 0.020),
+                        textWidget(
+                            height,
+                            'Duration : ${workingHoursList[index]}',
+                            height * 0.020),
                       ],
                     ),
-                  ),
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: textWidget(
-                      height,
-                      workDoneList[index],
-                      height * 0.02,
-                    ),
-                  ),
-                ),
 
-                /// Time....
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    textWidget(height, 'Start : ${startTimeList[index]}',
-                        height * 0.020),
-                    textWidget(height, 'End : ${endTimeList[index]}',
-                        height * 0.020),
-                    textWidget(
-                        height,
-                        'Duration : ${workingHoursList[index]}',
-                        height * 0.020),
+                    /// Percentage......
+                    Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: percentIndicator(
+                            height,
+                            percent = double.parse(workPercentageList[index]
+                                    .replaceAll(RegExp(r'.$'), "")) /
+                                100,
+                            "${workPercentageList[index]}")),
                   ],
                 ),
-
-                /// Percentage......
-                Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: percentIndicator(
-                        height,
-                        percent = double.parse(workPercentageList[index]
-                            .replaceAll(RegExp(r'.$'), "")) /
-                            100,
-                        "${workPercentageList[index]}")),
-              ],
+              );
+            })
+        : Center(
+            child: Text(
+              'No Works Completed',
+              style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  color: ConstantColor.blackColor,
+                  fontWeight: FontWeight.bold),
             ),
           );
-        })
-        : Center(
-      child: Text(
-        'No Works Completed',
-        style: TextStyle(
-            fontFamily: ConstantFonts.poppinsMedium,
-            color: ConstantColor.blackColor,
-            fontWeight: FontWeight.bold),
-      ),
-    );
   }
 
   Widget percentIndicator(double height, double val, String percentage) {
@@ -627,7 +626,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       backgroundColor: Colors.black.withOpacity(0.05),
       // progressColor: Colors.cyan,
       linearGradient:
-      const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
+          const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
       center: Text(
         percentage,
         style: TextStyle(
@@ -680,7 +679,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           filled: true,
           fillColor: Colors.white,
           contentPadding:
-          const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+              const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: ConstantColor.background1Color),
             borderRadius: BorderRadius.circular(10.0),
@@ -745,7 +744,7 @@ class ButtonWidget extends StatelessWidget {
         width: width * 0.25,
         decoration: BoxDecoration(
             border:
-            Border.all(color: colorValue ? Colors.green : Colors.black26),
+                Border.all(color: colorValue ? Colors.green : Colors.black26),
             color: Colors.black.withOpacity(0.05),
             borderRadius: BorderRadius.circular(10)),
         child: Column(

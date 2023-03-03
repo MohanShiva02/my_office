@@ -46,7 +46,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
       label: Text(
         'Create new visit form',
         style:
-        TextStyle(fontFamily: ConstantFonts.poppinsMedium, fontSize: 16.0),
+            TextStyle(fontFamily: ConstantFonts.poppinsMedium, fontSize: 16.0),
       ),
       icon: const Icon(
         Icons.add_circle_rounded,
@@ -62,21 +62,21 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
           return visitList.isNotEmpty
               ? buildUnfinishedVisitEntries(visitList: visitList)
               : Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 5.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border:
-                    Border.all(width: 1, color: const Color(0xff8355B7))),
-                child: Text(
-                  'No pending visit entry',
-                  style: TextStyle(
+                  child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 5.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      border:
+                          Border.all(width: 1, color: const Color(0xff8355B7))),
+                  child: Text(
+                    'No pending visit entry',
+                    style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
                       fontSize: 14.0,color: const Color(0xff8355B7)
+                    ),
                   ),
-                ),
-              ));
+                ));
         });
   }
 
