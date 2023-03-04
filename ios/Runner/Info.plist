@@ -4,11 +4,11 @@
 <dict>
 
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>''</string>
+    <string></string>
     <key>NSCameraUsageDescription</key>
-    <string>''</string>
+    <string></string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>''</string>
+    <string></string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -61,6 +61,5 @@
       <key>UIUserNotificationTypeSound</key>
       <integer>1</integer>
     </dict>
-
 </dict>
 </plist>
