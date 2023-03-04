@@ -244,10 +244,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                   : Expanded(
                     child: Column(
                       children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Lottie.asset('assets/animations/no_data.json'),
-                        ),
+                        Lottie.asset('assets/animations/no_data.json'),
                         Text('No Workdone Registered!!',style: TextStyle(
                           fontSize: 25,
                           fontFamily: ConstantFonts.poppinsMedium,

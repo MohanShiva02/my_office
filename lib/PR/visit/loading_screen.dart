@@ -23,11 +23,11 @@ class LoadingScreen extends StatefulWidget {
 
   const LoadingScreen(
       {Key? key,
-      required this.visitData,
-      required this.dateOfInstallation,
-      required this.endKmImage,
-      required this.endKm,
-      required this.summaryNotes})
+        required this.visitData,
+        required this.dateOfInstallation,
+        required this.endKmImage,
+        required this.endKm,
+        required this.summaryNotes})
       : super(key: key);
 
   @override
@@ -49,7 +49,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     final ref = FirebaseDatabase.instance.ref();
     final dbPath = ref.child(path.toLowerCase());
     final endKmUrl =
-        await uploadImage(image: widget.endKmImage, ref: storageRef);
+    await uploadImage(image: widget.endKmImage, ref: storageRef);
 
     if (status == 'uploading') {
       dbPath.set({
@@ -159,8 +159,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
                     child: status == 'uploading'
                         ? buildUploading()
                         : status == 'error'
-                            ? buildError()
-                            : buildSuccess(),
+                        ? buildError()
+                        : buildSuccess(),
                   ),
                 ),
               ],
@@ -260,18 +260,18 @@ class _LoadingScreenState extends State<LoadingScreen> {
             ),
             onPressed: () => Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (_) => const UserHomeScreen()),
-                (route) => false)),
+                    (route) => false)),
         CupertinoButton(
-            child: Text(
-              'Add another visit entry',
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  fontSize: 14.0,
-                  color: Colors.grey),
-            ),
-            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const VisitFromScreen()),
-                (route) => false)),
+          child: Text(
+            'Add another visit entry',
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                fontSize: 14.0,
+                color: Colors.grey),
+          ),
+          onPressed: () => Navigator.of(context).popUntil (
+              ModalRoute.withName('/visitResume')),
+        ),
       ],
     );
   }
