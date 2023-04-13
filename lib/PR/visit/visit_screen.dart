@@ -57,59 +57,79 @@ class _VisitScreenState extends State<VisitScreen> {
             Text('Customer Phone No',
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsMedium,
+                  color: ConstantColor.background1Color,
                 )),
-            TextFormField(
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.phone,
-              //validator
-              validator: (data) {
-                if (data!.trim().isEmpty) {
-                  return 'Enter a phone number';
-                } else if (data.trim().length < 10) {
-                  return 'Enter a valid phone number';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                phoneNumber = value.toString().trim();
-              },
-              style: const TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500),
+            Container(
+              child: TextFormField(
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.phone,
+                //validator
+                validator: (data) {
+                  if (data!.trim().isEmpty) {
+                    return 'Enter a phone number';
+                  } else if (data.trim().length < 10) {
+                    return 'Enter a valid phone number';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  phoneNumber = value.toString().trim();
+                },
+                style:  const TextStyle(
+                    fontSize: 16.0,
+                    color: ConstantColor.background1Color,
+                    fontWeight: FontWeight.w500),
 
-              //decoration
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                hintText: 'Phone number',
-                hintStyle: const TextStyle(
-                  color: Colors.grey,
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: BorderSide(
-                    width: 1,
-                    color: Colors.grey.withOpacity(.3),
+                ///decoration
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Phone number',
+                  hintStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
+                  filled: true,
+                  // fillColor: Colors.transparent,
+                  contentPadding:
+                  const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: ConstantColor.background1Color),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: const BorderSide(color: ConstantColor.background1Color),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    width: 1.5,
-                    color: Colors.purple,
-                  ),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(width: 1, color: Colors.red),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(
-                    width: 1.5,
-                    color: Colors.purple,
-                  ),
-                ),
+                // decoration: InputDecoration(
+                //   contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                //   hintText: 'Phone number',
+                //   hintStyle: const TextStyle(
+                //     color: Colors.grey,
+                //   ),
+                //   enabledBorder: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(8),
+                //     borderSide: BorderSide(
+                //       width: 1,
+                //       color: Colors.grey.withOpacity(.3),
+                //     ),
+                //   ),
+                //   focusedBorder: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(8),
+                //     borderSide: const BorderSide(
+                //       width: 1.5,
+                //       color: Colors.blue,
+                //     ),
+                //   ),
+                //   errorBorder: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(8),
+                //     borderSide: const BorderSide(width: 1, color: Colors.red),
+                //   ),
+                //   focusedErrorBorder: OutlineInputBorder(
+                //     borderRadius: BorderRadius.circular(8),
+                //     borderSide: const BorderSide(
+                //       width: 1.5,
+                //       color: Colors.purple,
+                //     ),
+                //   ),
+                // ),
               ),
             ),
           ],

@@ -62,10 +62,11 @@ class _MyAppState extends State<MyApp> {
     return ChangeNotifierProvider(
       create: (context) => TaskData(),
       child:  MaterialApp(
+        debugShowCheckedModeBanner: false,
           title: 'My Office',
           theme: ThemeData(
-            primarySwatch: Colors.purple,
-            scaffoldBackgroundColor: ConstantColor.backgroundColor,
+            // primarySwatch: Colors.white,
+            scaffoldBackgroundColor: ConstantColor.blackColor,
             fontFamily: 'PoppinsRegular',
           ),
           home: const InitialScreen(),
@@ -131,7 +132,7 @@ class AuthenticationScreen extends StatelessWidget {
             return const UserHomeScreen();
           } else {
             // print('iam inside of login ');
-            return const LoginScreen();
+            return const LoginScreen(); 
           }
         },
       ),

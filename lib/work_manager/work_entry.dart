@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:ui';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +51,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
   todayDate() {
     var now = DateTime.now();
+
     var formatterDate = DateFormat('yyy-MM-dd');
     var formatterYear = DateFormat('yyy');
     var formatterMonth = DateFormat('MM');
@@ -217,20 +220,26 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                 left: width * 0.05,
                 right: width * 0.05,
                 // bottom: height * 0.0,
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  height: height * 0.08,
-                  decoration: BoxDecoration(
-                    color: ConstantColor.background1Color,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(-6.0, 6.0),
-                          blurRadius: 5),
-                    ],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      padding: const EdgeInsets.all(0),
+                      height: height * 0.08,
+                      decoration: BoxDecoration(
+                        // color: ConstantColor.background1Color,
+                        gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withOpacity(0.5),
+                              Colors.white.withOpacity(0.1)
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight),
+                      ),
+                      child: tabBarContainer(height, width),
+                    ),
                   ),
-                  child: tabBarContainer(height, width),
                 ),
               ),
 
@@ -254,15 +263,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       controller: _tabController,
       physics: const BouncingScrollPhysics(),
       indicator: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Color(0xffD136D4),
-              Color(0xff7652B2),
-            ],
-          ),
+          gradient: LinearGradient(colors: [
+            Colors.white.withOpacity(0.5),
+            Colors.white.withOpacity(0.1)
+          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           borderRadius: BorderRadius.circular(10.0)),
       labelColor: Colors.white,
-      unselectedLabelColor: ConstantColor.blackColor,
+      unselectedLabelColor: Colors.black.withOpacity(0.5),
       automaticIndicatorColorAdjustment: true,
       labelStyle: TextStyle(
           fontWeight: FontWeight.w800, fontFamily: ConstantFonts.poppinsMedium),
@@ -272,7 +279,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           width: width * 0.3,
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: const Center(child: Text('Work Done')),
+          child: const Center(child: Text('Work Entry')),
         ),
         Container(
           height: height * 0.05,
@@ -288,7 +295,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   Widget tabViewContainer(double height, double width) {
     return Container(
       height: height * 0.9,
-      color: Colors.transparent,
+      // color: Colors.transparent,
       child: TabBarView(
         physics: const BouncingScrollPhysics(),
         controller: _tabController,
@@ -312,23 +319,37 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
               child: Column(
                 children: [
                   /// Text Field
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: width * 0.025),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                            color: _workController.text.isEmpty
-                                ? Colors.black26
-                                : Colors.green),
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.black12,
-                              offset: Offset(-0.0, 6.0),
-                              blurRadius: 5),
-                        ]),
-                    child: textFiledWidget(height, TextInputType.text,
-                        TextInputAction.done, 'Enter Work', _workController),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  Colors.white.withOpacity(0),
+                                  Colors.white.withOpacity(0)
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color:  Colors.white24,width: 2),
+                            // boxShadow: const [
+                            //   BoxShadow(
+                            //       color: Colors.black12,
+                            //       offset: Offset(-0.0, 6.0),
+                            //       blurRadius: 5),
+                            // ],
+                        ),
+                        child: textFiledWidget(
+                            height,
+                            TextInputType.text,
+                            TextInputAction.done,
+                            'Enter work details',
+                            _workController),
+                      ),
+                    ),
                   ),
 
                   /// 3 Buttons
@@ -345,7 +366,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             colorValue: timeOfStart.toString().isEmpty
                                 ? a = false
                                 : a = true,
-                            icon: const Icon(Icons.alarm),
+                            icon: const Icon(Icons.alarm,color: Colors.white,),
                             val:
                                 "${timeOfStartView!.isEmpty ? '--' : timeOfStartView}"),
                         ButtonWidget(
@@ -356,7 +377,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             colorValue: timeOfEnd.toString().isEmpty
                                 ? b = false
                                 : b = true,
-                            icon: const Icon(Icons.alarm),
+                            icon: const Icon(Icons.alarm,color: Colors.white,),
                             val:
                                 "${timeOfEndView!.isEmpty ? '--' : timeOfEndView}"),
                         GestureDetector(
@@ -428,36 +449,49 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               ).show();
                             });
                           },
-                          child: Container(
-                            margin: EdgeInsets.only(top: height * 0.03),
-                            height: height * 0.15,
-                            width: width * 0.25,
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.05),
-                                border: Border.all(
-                                    color: _percentController.text.isEmpty
-                                        ? Colors.black26
-                                        : Colors.green),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Icon(Icons.percent),
-                                Text(
-                                  _percentController.text.isEmpty
-                                      ? '--'
-                                      : _percentController.text,
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                  ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaY: 10,sigmaX: 10),
+                              child: Container(
+                                height: height * 0.15,
+                                width: width * 0.25,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: _percentController.text.isEmpty
+                                            ? Colors.white24
+                                            : Colors.blue,width: 2),
+
+                                    borderRadius: BorderRadius.circular(10),
+                                    gradient: LinearGradient(
+                                        colors: [Colors.white.withOpacity(0.5), Colors.white.withOpacity(0.1)],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight
+                                    )
                                 ),
-                                Text(
-                                  'percent',
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                  ),
-                                )
-                              ],
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    const Icon(Icons.percent,color: Colors.white,),
+                                    Text(
+                                      _percentController.text.isEmpty
+                                          ? '--'
+                                          : _percentController.text,
+                                      style: TextStyle(
+                                        fontFamily: ConstantFonts.poppinsMedium,
+                                        color: Colors.white
+                                      ),
+                                    ),
+                                    Text(
+                                      'percent',
+                                      style: TextStyle(
+                                        fontFamily: ConstantFonts.poppinsMedium,
+                                        color: Colors.white
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -473,11 +507,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             timeOfEnd!.isNotEmpty &&
                             _percentController.text.isNotEmpty &&
                             _workController.text.isNotEmpty) {
-
-                          String? startString =
-                          timeOfStart.toString().replaceAll(RegExp(':'), '');
+                          String? startString = timeOfStart
+                              .toString()
+                              .replaceAll(RegExp(':'), '');
                           String? endString =
-                          timeOfEnd.toString().replaceAll(RegExp(':'), '');
+                              timeOfEnd.toString().replaceAll(RegExp(':'), '');
 
                           int startInt = int.parse(startString);
                           int endInt = int.parse(endString);
@@ -526,28 +560,29 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                 });
                               }
 
-                                if (above6 >= 5) {
-                                  // print(above6);
-                                  timeOfEnd = '';
-                                  timeOfEndView = '';
-                                  showSnackBar(
-                                      message:
-                                      "Work time exceeds 5 hours enter correctly",
-                                      color: Colors.red.shade500);
-                                } else {
-                                  // print(above6);
-                                  setState(() {
-                                    isLoading = true;
-                                    createNewWork();
-                                    // print('created');
-                                  });
-                                }
-                            }else{
+                              if (above6 >= 5) {
+                                // print(above6);
+                                timeOfEnd = '';
+                                timeOfEndView = '';
+                                showSnackBar(
+                                    message:
+                                        "Work time exceeds 5 hours enter correctly",
+                                    color: Colors.red.shade500);
+                              } else {
+                                // print(above6);
+                                setState(() {
+                                  isLoading = true;
+                                  createNewWork();
+                                  // print('created');
+                                });
+                              }
+                            } else {
                               _percentController.clear();
-                              showSnackBar(message: 'enter correct percentage', color: Colors.red.shade500);
+                              showSnackBar(
+                                  message: 'enter correct percentage',
+                                  color: Colors.red.shade500);
                             }
-                          }
-                          else {
+                          } else {
                             timeOfStart = '';
                             timeOfEnd = '';
                             timeOfStartView = '';
@@ -556,25 +591,26 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                 message: 'Set the work time correctly',
                                 color: Colors.red.shade500);
                           }
-                        }else{
+                        } else {
                           showSnackBar(
                               message: 'Please Fill All Fields',
                               color: Colors.red.shade500);
                         }
-
                       });
                     },
                     child: Container(
-                      margin: EdgeInsets.only(top: height * 0.15),
+                      margin: EdgeInsets.only(top: height * 0.18),
                       height: height * 0.07,
                       width: width * 0.9,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         gradient: const LinearGradient(
                           colors: [
-                            Color(0xffD136D4),
-                            Color(0xff7652B2),
+                            Color(0xfff9d423),
+                            Color(0xfff83600),
                           ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter
                         ),
                       ),
                       child: Center(
@@ -606,73 +642,88 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
             ),
             itemCount: workDoneList.length,
             itemBuilder: (BuildContext ctx, index) {
-              return Container(
-                // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: ConstantColor.background1Color,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      offset: const Offset(-0.0, 5.0),
-                      blurRadius: 8,
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                child: Column(
-                  children: [
-                    /// Work Details Container...
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: height * 0.02),
-                      padding: const EdgeInsets.all(8),
-                      height: height * 0.10,
-                      width: width * 0.88,
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+                    child: Container(
+                      // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
+                      // margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        // color: ConstantColor.backgroundColor.withOpacity(0.09),
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color(0xffD136D4).withOpacity(0.09),
-                            const Color(0xff7652B2).withOpacity(0.3),
-                          ],
-                        ),
+                        // color: ConstantColor.background1Color,
+                          gradient: LinearGradient(
+                              colors: [Colors.white.withOpacity(0.2), Colors.white.withOpacity(0.4)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight
+                          ),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.black.withOpacity(0.2),
+                        //     offset: const Offset(-0.0, 5.0),
+                        //     blurRadius: 8,
+                        //   )
+                        // ],
+                        border: Border.all(color: Colors.white24,width: 2),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: textWidget(
-                          height,
-                          workDoneList[index],
-                          height * 0.02,
-                        ),
+                      child: Column(
+                        children: [
+                          /// Work Details Container...
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: height * 0.02),
+                            padding: const EdgeInsets.all(8),
+                            height: height * 0.10,
+                            width: width * 0.88,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              // color: ConstantColor.backgroundColor.withOpacity(0.09),
+                                gradient: LinearGradient(
+                                    colors: [Colors.white.withOpacity(0), Colors.white.withOpacity(0)],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight
+                                ),
+                            ),
+                            child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              child: textWidget(
+                                height,
+                                workDoneList[index],
+                                height * 0.02,
+                              ),
+                            ),
+                          ),
+
+                          /// Time....
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              textWidget(height, 'Start : ${startTimeList[index]}',
+                                  height * 0.020),
+                              textWidget(height, 'End : ${endTimeList[index]}',
+                                  height * 0.020),
+                              textWidget(
+                                  height,
+                                  'Duration : ${workingHoursList[index]}',
+                                  height * 0.020),
+                            ],
+                          ),
+
+                          /// Percentage......
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: percentIndicator(
+                                height,
+                                percent = double.parse(workPercentageList[index]
+                                        .replaceAll(RegExp(r'.$'), "")) /
+                                    100,
+                                "${workPercentageList[index]}"),
+                          ),
+                        ],
                       ),
                     ),
-
-                    /// Time....
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        textWidget(height, 'Start : ${startTimeList[index]}',
-                            height * 0.020),
-                        textWidget(height, 'End : ${endTimeList[index]}',
-                            height * 0.020),
-                        textWidget(
-                            height,
-                            'Duration : ${workingHoursList[index]}',
-                            height * 0.020),
-                      ],
-                    ),
-
-                    /// Percentage......
-                    Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: percentIndicator(
-                            height,
-                            percent = double.parse(workPercentageList[index]
-                                    .replaceAll(RegExp(r'.$'), "")) /
-                                100,
-                            "${workPercentageList[index]}"),),
-                  ],
+                  ),
                 ),
               );
             })
@@ -681,7 +732,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
               'No Works Completed',
               style: TextStyle(
                   fontFamily: ConstantFonts.poppinsMedium,
-                  color: ConstantColor.blackColor,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold),
             ),
           );
@@ -696,7 +747,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       backgroundColor: Colors.black.withOpacity(0.05),
       // progressColor: Colors.cyan,
       linearGradient:
-          const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
+          const LinearGradient(colors: [Color(0xff21d4fd), Color(0xffb721ff)]),
       center: Text(
         percentage,
         style: TextStyle(
@@ -715,7 +766,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         style: TextStyle(
             fontSize: size,
             fontFamily: ConstantFonts.poppinsMedium,
-            color: ConstantColor.blackColor),
+            color: ConstantColor.background1Color),
       ),
     );
   }
@@ -726,36 +777,35 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       TextInputAction textInputAction,
       String hintName,
       TextEditingController textEditingController) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: TextFormField(
-        controller: textEditingController,
-        textInputAction: textInputAction,
-        maxLines: 5,
-        autofocus: false,
-        keyboardType: textInputType,
-        onTap: () {
-          setState(() {});
-        },
-        style: TextStyle(
-            fontSize: height * 0.02,
-            color: Colors.black,
-            fontFamily: ConstantFonts.poppinsRegular),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hintName,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding:
-              const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: ConstantColor.background1Color),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: const BorderSide(color: Colors.transparent),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: textEditingController,
+      textInputAction: textInputAction,
+      maxLines: 5,
+      autofocus: false,
+      keyboardType: textInputType,
+      onTap: () {
+        setState(() {});
+      },
+      style: TextStyle(
+          fontSize: height * 0.02,
+          color: Colors.white,
+          fontFamily: ConstantFonts.poppinsRegular),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: hintName,
+        hintStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
+        filled: true,
+        // fillColor: Colors.transparent,
+        contentPadding:
+            const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: ConstantColor.background1Color),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.circular(10.0),
         ),
       ),
     );
@@ -806,32 +856,45 @@ class ButtonWidget extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: onClicked,
-      child: Container(
-        margin: EdgeInsets.only(top: height * 0.03),
-        height: height * 0.15,
-        width: width * 0.25,
-        decoration: BoxDecoration(
-            border:
-                Border.all(color: colorValue ? Colors.green : Colors.black26),
-            color: Colors.black.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            icon,
-            Text(
-              val,
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
+      child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+          child: Container(
+            margin: EdgeInsets.only(top: height * 0.0),
+            height: height * 0.15,
+            width: width * 0.25,
+            decoration: BoxDecoration(
+                border:
+                    Border.all(color: colorValue ? Colors.blue : Colors.white24,width: 2),
+                gradient: LinearGradient(
+                    colors: [Colors.white.withOpacity(0.5), Colors.white.withOpacity(0.1)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight
+                ),
+                borderRadius: BorderRadius.circular(10)
+                ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                icon,
+                Text(
+                  val,
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                    color: Colors.white
+                  ),
+                ),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              title,
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

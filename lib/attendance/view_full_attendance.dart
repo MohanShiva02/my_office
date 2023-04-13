@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../Constant/colors/constant_colors.dart';
@@ -26,243 +28,79 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
   Widget viewFullAttendancePage() {
     return Column(
       children: [
-        buildName(),
-        buildAddress(),
-        buildLatitude(),
-        buildLongitude(),
-        buildTime(),
+        buildDetails(
+          'Name',
+          widget.fullViewAttendance['Name'].toString(),
+        ),
+        buildDetails(
+          'Address',
+          widget.fullViewAttendance['Address'].toString(),
+        ),
+        buildDetails(
+          'Latitude',
+          widget.fullViewAttendance['Latitude'].toString(),
+        ),
+        buildDetails(
+          'Longitude',
+          widget.fullViewAttendance['Longitude'].toString(),
+        ),
+        buildDetails(
+          'Time',
+          widget.fullViewAttendance['Time'].toString(),
+        ),
       ],
     );
   }
 
-  Widget buildName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
-          TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Name",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullViewAttendance['Name'].toString(),
-                    style: TextStyle(
-                        color: ConstantColor.headingTextColor,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildAddress() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
-          TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Address",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullViewAttendance['Address'].toString(),
-                    style: TextStyle(
-                        color: ConstantColor.headingTextColor,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildLatitude() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
-          TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Latitude",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullViewAttendance['Latitude'].toString(),
-                    style: TextStyle(
-                        color: ConstantColor.headingTextColor,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildLongitude() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
-          TableRow(
-            decoration: BoxDecoration(
+  Widget buildDetails(String title, String val) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(3),
+              1: FlexColumnWidth(3),
+            },
+            border: TableBorder.all(
               borderRadius: BorderRadius.circular(10),
+              color: Colors.white24,
+              width: 2,
             ),
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  "Longitude",
-                  style: TextStyle(
-                    color: ConstantColor.backgroundColor,
-                    fontSize: 17,
-                    fontFamily: ConstantFonts.poppinsMedium,
+              TableRow(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        color: ConstantColor.background1Color,
+                        fontSize: 17,
+                        fontFamily: ConstantFonts.poppinsBold,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SelectableText(
-                  widget.fullViewAttendance['Longitude'].toString(),
-                  style: TextStyle(
-                      color: ConstantColor.headingTextColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SelectableText(
+                      val,
+                      style: TextStyle(
+                          color: ConstantColor.background1Color,
+                          fontSize: 17,
+                          fontFamily: ConstantFonts.poppinsMedium),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
         ),
-        children: [
-          TableRow(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  "Time",
-                  style: TextStyle(
-                    color: ConstantColor.backgroundColor,
-                    fontSize: 17,
-                    fontFamily: ConstantFonts.poppinsMedium,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SelectableText(
-                  widget.fullViewAttendance['Time'].toString(),
-                  style: TextStyle(
-                      color: ConstantColor.headingTextColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium),
-                ),
-              ),
-            ],
-          )
-        ],
       ),
     );
   }

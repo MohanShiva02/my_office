@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -60,27 +61,47 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
             itemCount: allSuggestion.length,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AllSuggestions(fullSuggestions: allSuggestion[index]),
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.white24,width: 2),
+                          gradient: LinearGradient(
+                              colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.1)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight
+                          )
+                      ),
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => AllSuggestions(
+                                  fullSuggestions: allSuggestion[index]),
+                            ),
+                          );
+                        },
+                        leading: const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: ConstantColor.background1Color,
+                          child: Icon(Icons.date_range),
+                        ),
+                        title: Text(
+                          allSuggestion[index]['date'].toString(),
+                          style: TextStyle(
+                            color: ConstantColor.background1Color,
+                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                },
-                leading: const CircleAvatar(
-                  radius: 20,
-                  backgroundColor: ConstantColor.backgroundColor,
-                  child: Icon(Icons.date_range),
-                ),
-                title: Text(
-                  allSuggestion[index]['date'].toString(),
-                  style: TextStyle(
-                    color: ConstantColor.backgroundColor,
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               );

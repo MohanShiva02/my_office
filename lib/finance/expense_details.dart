@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
+import 'package:my_office/util/main_template.dart';
 import '../util/screen_template.dart';
 import 'expense_model.dart';
 
@@ -17,10 +18,8 @@ class ExpenseDetails extends StatefulWidget {
 class _ExpenseDetailsState extends State<ExpenseDetails> {
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildExpenseDetailsScreen(),
-      title: 'Expense Details',
-    );
+    return MainTemplate(subtitle: 'Expense Details', templateBody: buildExpenseDetailsScreen(), bgColor: ConstantColor.background1Color);
+
   }
 
   Widget buildExpenseDetailsScreen() {

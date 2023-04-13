@@ -153,40 +153,44 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Widget attendance() {
     return SafeArea(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Image(
-              image: AssetImage('assets/entry.png'),
-            ),
-            const SizedBox(height: 10),
-            isLoading
-                ? const CircularProgressIndicator()
-                : isEntered
-                    ? Column(
-                        children: [
-                          Text(
-                            'Your Entry has already Registered!!!',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              fontWeight: FontWeight.w500,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Image(
+                image: AssetImage('assets/entry.png'),
+              ),
+              const SizedBox(height: 10),
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : isEntered
+                      ? Column(
+                          children: [
+                            Text(
+                              'Your Entry has already Registered!!!',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: ConstantFonts.poppinsMedium,
+                                fontWeight: FontWeight.w500,
+                                color: ConstantColor.background1Color
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Leave the Page...',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      )
-                    :
-            submitButton(),
-          ],
+                            // Text(
+                            //   'Leave the Page...',
+                            //   style: TextStyle(
+                            //     fontSize: 20,
+                            //     fontFamily: ConstantFonts.poppinsMedium,
+                            //     fontWeight: FontWeight.w500,
+                            //   ),
+                            // ),
+                          ],
+                        )
+                      :
+              submitButton(),
+            ],
+          ),
         ),
       ),
     );

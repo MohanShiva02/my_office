@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'View Attendance List!!',
+        subtitle: 'Attendance List',
         templateBody: viewAttendancePage(),
         bgColor: ConstantColor.background1Color);
   }
@@ -123,7 +124,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsBold,
                   fontSize: 17,
-                  color: ConstantColor.backgroundColor,
+                  color: ConstantColor.background1Color,
                 ),
               ),
             ],
@@ -135,26 +136,46 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                 child: ListView.builder(
                   itemCount: fullAttendance.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ViewAllAttendance(
-                                fullViewAttendance: fullAttendance[index]),
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ClipRRect(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+                          child: Container(
+                            // margin: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Colors.white24,width: 2),
+                                gradient: LinearGradient(
+                                    colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.1)],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight
+                                )
+                            ),
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewAllAttendance(
+                                        fullViewAttendance: fullAttendance[index]),
+                                  ),
+                                );
+                              },
+                              leading: const CircleAvatar(
+                                radius: 20,
+                                backgroundColor: ConstantColor.background1Color,
+                                child: Icon(Icons.person),
+                              ),
+                              title: Text(
+                                fullAttendance[index]['Name'].toString(),
+                                style: TextStyle(
+                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    color: ConstantColor.background1Color,
+                                    fontSize: 18),
+                              ),
+                            ),
                           ),
-                        );
-                      },
-                      leading: const CircleAvatar(
-                        radius: 20,
-                        backgroundColor: ConstantColor.backgroundColor,
-                        child: Icon(Icons.person),
-                      ),
-                      title: Text(
-                        fullAttendance[index]['Name'].toString(),
-                        style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
-                            fontSize: 18),
+                        ),
                       ),
                     );
                   },
@@ -171,7 +192,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                         'No Entry Registered',
                         style: TextStyle(
                           fontFamily: ConstantFonts.poppinsMedium,
-                          color: ConstantColor.blackColor,
+                          color: ConstantColor.background1Color,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:ui';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +110,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                                 startTimeList.add(fbData['to']);
                                 endTimeList.add(fbData['from']);
                                 workingHoursList.add(fbData['time_in_hours']);
+                                // print(element.value'');
                               });
                             }
                           }
@@ -151,49 +154,62 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
     List<Widget> workDoneNames = [];
 
     for (int i = 0; i < nameData.length; i++) {
-      final widget = Container(
-        // height: height * 0.1,
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: ConstantColor.background1Color,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(-0.0, 5.0),
-              blurRadius: 8,
-            )
-          ],
-          borderRadius: BorderRadius.circular(11),
-        ),
-        child: Center(
-          child: ListTile(
-            onTap: () {
-              var workDone;
-              if (allData[i]['name'].contains(nameData[i])) {
-                workDone = allData[i]['workDone'];
-              }
-              workDone =
-                  allData.where((element) => element['name'] == nameData[i]);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => IndividualWorkDone(
-                      workDetails: workDone.toList(),
-                      employeeName: nameData[i]),
+      final widget = Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaY: 10,sigmaX: 10,),
+            child: Container(
+              // height: height * 0.1,
+              // margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Colors.black.withOpacity(0.2),
+                //     offset: const Offset(-0.0, 5.0),
+                //     blurRadius: 8,
+                //   )
+                // ],
+                border: Border.all(color: Colors.white24,width: 3),
+                  gradient: LinearGradient(
+                      colors: [Colors.white.withOpacity(0.1), Colors.white.withOpacity(0.3)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight
+                  ),
+                borderRadius: BorderRadius.circular(11),
+              ),
+              child: Center(
+                child: ListTile(
+                  onTap: () {
+                    var workDone;
+                    if (allData[i]['name'].contains(nameData[i])) {
+                      workDone = allData[i]['workDone'];
+                    }
+                    workDone =
+                        allData.where((element) => element['name'] == nameData[i]);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => IndividualWorkDone(
+                            workDetails: workDone.toList(),
+                            employeeName: nameData[i]),
+                      ),
+                    );
+                  },
+                  leading: const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: ConstantColor.backgroundColor,
+                    child: Icon(Icons.person),
+                  ),
+                  title: Text(
+                    '${nameData[i]}',
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        color: ConstantColor.background1Color,
+                        fontSize: height * 0.020),
+                  ),
                 ),
-              );
-            },
-            leading: const CircleAvatar(
-              radius: 20,
-              backgroundColor: ConstantColor.backgroundColor,
-              child: Icon(Icons.person),
-            ),
-            title: Text(
-              '${nameData[i]}',
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  color: ConstantColor.blackColor,
-                  fontSize: height * 0.020),
+              ),
             ),
           ),
         ),
@@ -235,7 +251,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                         style: TextStyle(
                             fontFamily: ConstantFonts.poppinsBold,
                             fontSize: 17,
-                            color: ConstantColor.backgroundColor)),
+                            color: ConstantColor.background1Color)),
                   ],
                 ),
               ),
@@ -256,7 +272,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                             'No work done yet',
                             style: TextStyle(
                               fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
+                              color: ConstantColor.background1Color,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),

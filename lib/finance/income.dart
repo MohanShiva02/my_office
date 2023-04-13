@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/finance/expense.dart';
 import 'package:my_office/finance/income_details.dart';
+import 'package:my_office/util/main_template.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/screen_template.dart';
@@ -61,10 +62,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildIncomeScreen(),
-      title: 'Income',
-    );
+    return MainTemplate(subtitle: 'Income', templateBody: buildIncomeScreen(), bgColor: ConstantColor.background1Color);
   }
 
   Widget buildIncomeScreen() {
@@ -91,7 +89,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsBold,
                   fontSize: 17,
-                  color: ConstantColor.backgroundColor,
+                  color: ConstantColor.background1Color,
                 ),
               ),
             ],

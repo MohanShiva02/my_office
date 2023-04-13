@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -154,34 +155,49 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     List<Widget> absentNames = [];
 
     for (int i = 0; i < notEntry.length; i++) {
-      final widget = Container(
-        // height: height * 0.1,
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: ConstantColor.background1Color,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(-0.0, 5.0),
-              blurRadius: 8,
-            )
-          ],
-          borderRadius: BorderRadius.circular(11),
-        ),
-        child: Center(
-          child: ListTile(
-            leading: const CircleAvatar(
-              radius: 20,
-              backgroundColor: ConstantColor.backgroundColor,
-              child: Icon(Icons.person),
+      final widget = Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          clipBehavior: Clip.hardEdge,
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 15,sigmaY: 15),
+          child: Container(
+            // height: height * 0.1,
+            // margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.white.withOpacity(0.2), Colors.white.withOpacity(0.5)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight
+                ),
+                border: Border.all(color: Colors.white24,width: 2),
+              // boxShadow: [
+              //   // BoxShadow(
+              //   //   color: Colors.black.withOpacity(0.2),
+              //   //   offset: const Offset(-0.0, 5.0),
+              //   //   blurRadius: 8,
+              //   // )
+              // ],
+              borderRadius: BorderRadius.circular(20),
             ),
-            title: Text(
-              notEntry[i],
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  color: ConstantColor.blackColor,
-                  fontSize: 16),
+            child: Center(
+              child: ListTile(
+                leading: const CircleAvatar(
+                  radius: 20,
+                  backgroundColor: ConstantColor.backgroundColor,
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  notEntry[i],
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      color: ConstantColor.background1Color,
+                      fontSize: 16),
+                ),
+              ),
             ),
+          ),
           ),
         ),
       );
@@ -214,7 +230,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                         style: TextStyle(
                             fontFamily: ConstantFonts.poppinsBold,
                             fontSize: 17,
-                            color: ConstantColor.backgroundColor)),
+                            color: ConstantColor.background1Color)),
                   ],
                 ),
               ),

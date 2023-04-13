@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,6 +43,7 @@ class _MainTemplateState extends State<MainTemplate> {
   SharedPreferences? preferences;
 
   String preferencesImageUrl = '';
+
   // String preferencesImageUrl2 = '';
 
   Future getImageUrl() async {
@@ -70,10 +72,10 @@ class _MainTemplateState extends State<MainTemplate> {
     return RefreshIndicator(
       onRefresh: () async {
         await Future.delayed(const Duration(seconds: 5));
+        if (!mounted) return;
         setState(() {
           _pageLoadController();
         });
-
       },
       child: Scaffold(
         body: SizedBox(
@@ -85,13 +87,20 @@ class _MainTemplateState extends State<MainTemplate> {
               Positioned(
                 top: 0,
                 child: Container(
-                  height: height * 0.95,
+                  height: height * 1,
                   width: width,
                   padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).viewPadding.top * 1.5),
-                  decoration: BoxDecoration(
-                    color: widget.bgColor,
-                    borderRadius: const BorderRadius.only(
+                      top: MediaQuery.of(context).viewPadding.top * 1.1),
+                  decoration: const BoxDecoration(
+                    image:  DecorationImage(
+                        image: AssetImage(
+                            // "https://img.freepik.com/premium-photo/abstract-mixed-paint-background_692702-9722.jpg?w=900",
+                          "assets/243168667616.jpg"
+                        ),
+                      // image: NetworkImage(
+                      //       "https://img.freepik.com/premium-vector/vector-abstract-background-bright-gradient-colors_106427-417.jpg?w=740"),
+                        fit: BoxFit.cover,),
+                    borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(30.0),
                       bottomLeft: Radius.circular(30.0),
                     ),
@@ -105,56 +114,79 @@ class _MainTemplateState extends State<MainTemplate> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              //Name and subtitle
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    staffInfo == null
-                                        ? 'Hi'
-                                        : 'Hi ${staffInfo!.name}',
-                                    style: TextStyle(
-                                      fontFamily: ConstantFonts.poppinsMedium,
-                                      fontSize: 24.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaY: 5,sigmaX: 5),
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                    gradient: LinearGradient(
+                                        colors: [Colors.white.withOpacity(0), Colors.white.withOpacity(0.3)],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight
                                     ),
-                                  ),
-                                  Text(
-                                    widget.subtitle,
-                                    style: TextStyle(
-                                      fontFamily: ConstantFonts.poppinsMedium,
-                                      fontSize: 14.0,
+                                  border: Border.all(color: Colors.white24,width: 2)
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    //Name and subtitle
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          staffInfo == null
+                                              ? 'Hi'
+                                              : 'Hi ${staffInfo!.name}',
+                                          style: TextStyle(
+                                            fontFamily: ConstantFonts.poppinsMedium,
+                                            fontSize: 24.0,
+                                            color: Colors.white.withOpacity(0.8)                                          ),
+                                        ),
+                                        Text(
+                                          widget.subtitle,
+                                          style: TextStyle(
+                                            fontFamily: ConstantFonts.poppinsMedium,
+                                            fontSize: 14.0,
+                                              color: Colors.white.withOpacity(0.8)
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
 
-                              //Profile icon
-                              GestureDetector(
-                                onTap: () {
-                                  // getImageUrl();
-                                  HapticFeedback.mediumImpact();
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => AccountScreen(
-                                          staffDetails: staffInfo!)));
-                                },
-                                child: SizedBox(
-                                  height: height * 0.08,
-                                  width: height * 0.08,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child:  preferencesImageUrl == ''
-                                        ? const Icon(Iconsax.user) : Image.network(preferencesImageUrl,fit: BoxFit.cover,)
-                                        // : Image.file(
-                                        //     File(preferencesImageUrl).absolute,
-                                        //     fit: BoxFit.cover,
-                                        //   ),
-                                  ),
+                                    //Profile icon
+                                    GestureDetector(
+                                      onTap: () {
+                                        // getImageUrl();
+                                        HapticFeedback.mediumImpact();
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                            builder: (_) => AccountScreen(
+                                                staffDetails: staffInfo!)));
+                                      },
+                                      child: SizedBox(
+                                        height: height * 0.08,
+                                        width: height * 0.08,
+                                        child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(100),
+                                            child: preferencesImageUrl == ''
+                                                ? const Icon(Iconsax.user)
+                                                : Image.network(
+                                                    preferencesImageUrl,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                            // : Image.file(
+                                            //     File(preferencesImageUrl).absolute,
+                                            //     fit: BoxFit.cover,
+                                            //   ),
+                                            ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                         SizedBox(height: height * 0.01),

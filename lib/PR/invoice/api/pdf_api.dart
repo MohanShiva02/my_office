@@ -13,6 +13,7 @@ class PdfApi {
     final dir = await getApplicationDocumentsDirectory();
     final file = File('${dir.path}/$name');
 
+
     await file.writeAsBytes(bytes);
 
     return file;
@@ -20,7 +21,6 @@ class PdfApi {
 
   static Future openFile(File file) async {
     final url = file.path;
-
     await OpenFile.open(url);
   }
 }

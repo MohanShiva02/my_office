@@ -1,4 +1,6 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
@@ -11,146 +13,127 @@ class AnnouncementScreen extends StatefulWidget {
 }
 
 class _AnnouncementScreenState extends State<AnnouncementScreen> {
+  final ref = FirebaseDatabase.instance.ref();
+
   TextEditingController textEditingController = TextEditingController();
+
+  List listOfProd = [];
+
+  var s;
+
+  Future<void> getProducts() async {
+    ref.child('inventory_management').once().then((value) {
+      for (var a in value.snapshot.children) {
+        // print(a.key);
+        setState(() {
+          s = a.value;
+          listOfProd.add(s['name']);
+          // print(listOfProd);
+        });
+      }
+    });
+  }
+
+  String? productName;
+  String? price;
+  var setval;
+
+  Future<void> getProductsDetails() async {
+    // print('hi');
+    ref.child('inventory_management').once().then((value) {
+      for (var a in value.snapshot.children) {
+        // print(a.value);
+        if(a.value.toString().contains(selectedVal.toString())){
+          print(a.value);
+          setval = a.value;
+          setState(() {
+            productName = setval['name'];
+            price = setval['max_price'];
+          });
+
+        }
+      }
+    });
+  }
+
+  String? _chosenValue;
+
+  String? selectedVal;
+
+  @override
+  void initState() {
+    getProducts();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(
-        height: height * 0.95,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-            color: ConstantColor.background1Color,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30))),
-        child: Stack(
-          children: [
-            /// Top circle
-            Positioned(
-              top: height * 0.05,
-              // left: width * 0.05,
-              right: width * 0.05,
-              child: const CircleAvatar(
-                backgroundColor: ConstantColor.backgroundColor,
-                radius: 20,
-                child: Icon(
-                  Icons.person_rounded,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            ///Top Text...
-            Positioned(
-              top: height * 0.05,
-              left: width * 0.05,
-              // right: width*0.0,
-              child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Hi Admin\n',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.030,
-                    ),
-                  ),
-                  TextSpan(
-                    text: 'Onyx Announcement',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.020,
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-            Positioned(
-              top: height *  0.28,
-              // left: width * 0.05,
-              right: width * 0.33,
-              child: Image.asset('assets/human with speaker.png',scale: 2.9,),),
-            Positioned(
-              top: height * 0.13,
-              left: width * 0.05,
-              right: width * 0.05,
-              bottom: height * 0,
-              child: textFieldWidget(height, width, 'Type Here', '', Image.asset('assets/speaker.png',scale: 3.0,), textEditingController, TextInputType.text, TextInputAction.done)),
-
-
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget textFieldWidget(
-      double height,
-      double width,
-      String name,
-      String title,
-      Image image,
-      TextEditingController textEditingController,
-      TextInputType inputType,
-      TextInputAction action) {
-    return Container(
-      height: height * 0.15,
-      width: width * 0.8,
-      color: Colors.transparent,
-      child: Column(
-        crossAxisAlignment:CrossAxisAlignment.start,
+      backgroundColor: Colors.white,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: ConstantColor.blackColor,
-              fontFamily: ConstantFonts.poppinsMedium,
-            ),
-          ),
+
           SizedBox(
-            height: height*0.07,
-            child: TextFormField(
-              controller: textEditingController,
-              textInputAction: action,
-              keyboardType: inputType,
-              autocorrect: true,
+            height: 300,
+            child: ListView.builder(
+                itemCount: listOfProd.length,
+                itemBuilder: (BuildContext context, int i) {
+                  return GestureDetector(
+                    onTap: () {
+                      // print(listOfProd[i]);
+                      selectedVal = listOfProd[i];
+                      setState(() {
+                        getProductsDetails();
+                      });
+                    },
+                    child: Container(
+                        margin: const EdgeInsets.all(10),
+                        height: 50,
+                        color: Colors.amber,
+                        child: Center(child: Text(listOfProd[i]))),
+                  );
+                }),
+          ),
+          DropdownButton<String>(
+            focusColor:Colors.white,
+            value: _chosenValue,
+            //elevation: 5,
+            style: TextStyle(color: Colors.white),
+            iconEnabledColor:Colors.black,
+            items: listOfProd.map<DropdownMenuItem<String>>((value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value,style:TextStyle(color:Colors.black),),
+              );
+            }).toList(),
+            hint:Text(
+              "Please choose a langauage",
               style: TextStyle(
-                color: ConstantColor.blackColor,
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
-              decoration: InputDecoration(
-                hintText: name,
-                suffixIcon: GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      print('hiii');
-                    });
-                  },
-                  child: image,
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500),
+            ),
+            onChanged: (value) {
+              setState(() {
+                _chosenValue = value;
+              });
+            },
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
 
-                ),
-
-                hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.2),
-                    fontFamily: ConstantFonts.poppinsMedium),
-                filled: true,
-                fillColor: ConstantColor.background1Color,
-                enabledBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                  borderSide: BorderSide(color: Colors.black, width: 1),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  borderSide: BorderSide(color: Colors.black, width: 1),
-                ),
-              ),
+              },
+              child: Text('get'),
             ),
           ),
+          Text(productName.toString()),
+          Text(price.toString()),
         ],
       ),
     );
   }
-  
 }

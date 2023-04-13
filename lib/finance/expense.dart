@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../util/main_template.dart';
 import '../util/screen_template.dart';
 import 'expense_details.dart';
 import 'expense_model.dart';
@@ -60,10 +61,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildExpenseScreen(),
-      title: 'Expense',
-    );
+    return MainTemplate(subtitle: 'Expense', templateBody: buildExpenseScreen(), bgColor: ConstantColor.background1Color);
+
   }
 
   Widget buildExpenseScreen() {
@@ -90,7 +89,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsBold,
                   fontSize: 17,
-                  color: ConstantColor.backgroundColor,
+                  color: ConstantColor.background1Color,
                 ),
               ),
             ],
@@ -114,14 +113,14 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 },
                 leading: const CircleAvatar(
                   radius: 20,
-                  backgroundColor: ConstantColor.backgroundColor,
+                  backgroundColor: ConstantColor.background1Color,
                   child: Icon(Icons.receipt_long),
                 ),
                 title: Text(
                   allExpense[index].productName,
                   style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
+                      color: ConstantColor.background1Color,
                       fontSize: 17),
                 ),
               );
@@ -140,7 +139,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
         style: TextStyle(
                     fontFamily: ConstantFonts.poppinsMedium,
-                    color: ConstantColor.blackColor,
+                    color: ConstantColor.background1Color,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),

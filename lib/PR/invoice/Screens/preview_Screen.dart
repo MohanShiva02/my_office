@@ -117,6 +117,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   String supplierEmail = " ";
   String supplierWebsite = " ";
   String supplierGst = " ";
+
   // User? user;
   late DateTime currentPhoneDate;
   var dataJson;
@@ -689,23 +690,30 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       fileName.clear();
                                       quotNo.clear();
                                       estimateDate.clear();
-                                    }).then((value) => {
-
-                                    setState(() {
-                                      // if(!mounted) return;
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (_) => const UserHomeScreen()),
-                                            (route) => false);
-                                    Provider.of<TaskData>(context, listen: false)
-                                        .invoiceListData
-                                        .clear();
-                                    Provider.of<TaskData>(context, listen: false)
-                                        .value
-                                        .clear();
-                                    Provider.of<TaskData>(context, listen: false)
-                                        .deleteCustomerDetails(1);
-                                    }),
+                                    }).then((value) =>
+                                    {
+                                      setState(() {
+                                        // if(!mounted) return;
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (
+                                                    _) => const UserHomeScreen()),
+                                                (route) => false);
+                                        Provider
+                                            .of<TaskData>(
+                                            context, listen: false)
+                                            .invoiceListData
+                                            .clear();
+                                        Provider
+                                            .of<TaskData>(
+                                            context, listen: false)
+                                            .value
+                                            .clear();
+                                        Provider.of<TaskData>(
+                                            context, listen: false)
+                                            .deleteCustomerDetails(1);
+                                      }),
                                     });
                                   }
                                   else {
@@ -715,12 +723,13 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                   }
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   width: 130,
                                   height: 70,
                                   decoration: BoxDecoration(
                                     // color: const Color(0xffFF7E44),
-                                    color:  const Color(0xff00bcd4),
+                                    color: const Color(0xff00bcd4),
                                     borderRadius: BorderRadius.circular(15),
                                     boxShadow: [
                                       BoxShadow(
@@ -731,7 +740,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     ],
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
                                       const Text(
                                         'Save as',
@@ -741,7 +751,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             fontFamily: 'Nexa',
                                             color: Colors.white),
                                       ),
-                                      Image.asset('assets/pdf.png',scale: 3.0,),
+                                      Image.asset(
+                                        'assets/pdf.png', scale: 3.0,),
 
                                     ],
                                   ),
@@ -813,17 +824,18 @@ class _PreviewScreenState extends State<PreviewScreen> {
   void showSnackBar({required String message, required Color color}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        padding: const EdgeInsets.all(0.0),
-        content: Container(
-            height: 50.0,
-            color: color,
-            child: Center(
-                child: Text(
-                  message,
-                  style: const TextStyle(fontFamily: 'Nexa'),
-                )))));
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      padding: const EdgeInsets.all(0.0),
+      content: Container(
+        height: 50.0,
+        color: color,
+        child: Center(
+          child: Text(
+            message,
+            style: const TextStyle(fontFamily: 'Nexa'),
+          ),
+        ),),),);
   }
 
   TableRow buildRow(List<String> cells, {bool isHeader = false}) =>

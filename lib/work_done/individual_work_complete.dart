@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:my_office/util/main_template.dart';
 import 'package:my_office/util/screen_template.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../Constant/colors/constant_colors.dart';
@@ -23,104 +26,122 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return ScreenTemplate(
-        bodyTemplate: workDetailsContainer(height, width),
-        title: widget.employeeName);
+    return MainTemplate(
+        subtitle: 'Work history of ${widget.employeeName}',
+        templateBody: workDetailsContainer(height, width),
+        bgColor: ConstantColor.background1Color);
+
+    // ScreenTemplate(
+    //   bodyTemplate: workDetailsContainer(height, width),
+    //   title: widget.employeeName);
   }
 
   Widget workDetailsContainer(double height, double width) {
     // print(widget.workDetails.length.bitLength);
 
     return ListView.builder(
-        scrollDirection: Axis.vertical,
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: widget.workDetails.length,
-        itemBuilder: (BuildContext context, int ind) {
-          return Container(
-            height: height * 0.25,
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: ConstantColor.background1Color,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  offset: const Offset(-0.0, 0.0),
-                  blurRadius: 3,
+      scrollDirection: Axis.vertical,
+      physics: const BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: widget.workDetails.length,
+      itemBuilder: (BuildContext context, int ind) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
+                // margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  // color: ConstantColor.background1Color,
+                  gradient: LinearGradient(colors: [
+                    Colors.white.withOpacity(0.2),
+                    Colors.white.withOpacity(0.4)
+                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+
+                  border: Border.all(color: Colors.white24, width: 2),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ],
-              borderRadius: BorderRadius.circular(11),
-            ),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: height * 0.02, horizontal: width * 0.02),
-                    padding: const EdgeInsets.all(8),
-                    height: height * 0.1,
-                    width: width * 0.88,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      // color: ConstantColor.backgroundColor.withOpacity(0.09),
-                      gradient: LinearGradient(
-                        colors: [
-                          const Color(0xffD136D4).withOpacity(0.09),
-                          const Color(0xff7652B2).withOpacity(0.3),
-                        ],
-                      ),
+                child: Container(
+                  height: height * 0.25,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: height * 0.02,
+                              horizontal: width * 0.02),
+                          padding: const EdgeInsets.all(8),
+                          height: height * 0.1,
+                          width: width * 0.88,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            // color: ConstantColor.backgroundColor.withOpacity(0.09),
+                          ),
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: textWidget(
+                              height,
+                              widget.workDetails[ind]['workDone'],
+                              height * 0.010,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin:
+                              EdgeInsets.symmetric(horizontal: width * 0.03),
+                          child: percentIndicator(
+                            height * 2,
+                            double.parse(widget.workDetails[ind]
+                                        ['workPercentage']
+                                    .replaceAll(RegExp(r'.$'), "")) /
+                                100,
+                            widget.workDetails[ind]['workPercentage'],
+                            double.parse(widget.workDetails[ind]
+                                            ['workPercentage']
+                                        .replaceAll(RegExp(r'.$'), "")) <
+                                    50
+                                ? Colors.black
+                                : ConstantColor.background1Color,
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.03,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            textWidget(
+                                height,
+                                'Start : ${widget.workDetails[ind]['from']}',
+                                height * 0.010),
+                            textWidget(
+                                height,
+                                'End : ${widget.workDetails[ind]['to']}',
+                                height * 0.010),
+                            textWidget(
+                                height,
+                                'Duration : ${widget.workDetails[ind]['time_in_hours']}',
+                                height * 0.010),
+                          ],
+                        ),
+                      ],
                     ),
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: textWidget(
-                        height,
-                        widget.workDetails[ind]['workDone'],
-                        height * 0.010,
-                      ),
-                    ),
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: width * 0.03),
-                    child: percentIndicator(
-                      height * 2,
-                      double.parse(widget.workDetails[ind]['workPercentage']
-                              .replaceAll(RegExp(r'.$'), "")) /
-                          100,
-                      widget.workDetails[ind]['workPercentage'],
-                      double.parse(widget.workDetails[ind]['workPercentage']
-                                  .replaceAll(RegExp(r'.$'), "")) <
-                              50
-                          ? Colors.black
-                          : ConstantColor.background1Color,
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 0.03,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      textWidget(
-                          height,
-                          'Start : ${widget.workDetails[ind]['from']}',
-                          height * 0.010),
-                      textWidget(
-                          height,
-                          'End : ${widget.workDetails[ind]['to']}',
-                          height * 0.010),
-                      textWidget(
-                          height,
-                          'Duration : ${widget.workDetails[ind]['time_in_hours']}',
-                          height * 0.010),
-                    ],
-                  ),
-                ],
+                ),
               ),
             ),
-          );
-        },);
+          ),
+        );
+      },
+    );
   }
 
   Widget percentIndicator(
@@ -133,7 +154,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
       backgroundColor: Colors.black.withOpacity(0.05),
       // progressColor: Colors.cyan,
       linearGradient:
-          const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
+          const LinearGradient(colors: [Color(0xff21d4fd), Color(0xffb721ff)]),
       center: Text(
         val,
         style: TextStyle(
@@ -151,7 +172,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
       style: TextStyle(
           fontSize: size * 2,
           fontFamily: ConstantFonts.poppinsMedium,
-          color: ConstantColor.blackColor),
+          color: ConstantColor.background1Color),
     );
   }
 }

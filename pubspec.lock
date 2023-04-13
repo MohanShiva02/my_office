@@ -309,6 +309,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  drop_down_list:
+    dependency: "direct main"
+    description:
+      name: drop_down_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   dropdown_button2:
     dependency: "direct main"
     description:
@@ -517,6 +524,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.9"
+  flutter_rounded_date_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_rounded_date_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
   flutter_svg:
     dependency: transitive
     description:

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
@@ -27,9 +29,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          buildDate(),
-          buildIsRead(),
-          buildTime(),
+          buildDetails('Date', widget.fullSuggestions['date'].toString()),
+          buildDetails('Is Read', widget.fullSuggestions['isread'].toString()),
+          buildDetails('Time', widget.fullSuggestions['time'].toString()),
           const SizedBox(height: 30),
           buildMessage(),
         ],
@@ -37,204 +39,122 @@ class _AllSuggestionsState extends State<AllSuggestions> {
     );
   }
 
-  Widget buildDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
-          TableRow(
-            decoration: BoxDecoration(
+  Widget buildDetails(String title, String val) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      // padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(3),
+              1: FlexColumnWidth(3),
+            },
+            border: TableBorder.all(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
+              color: Colors.white24,
+              width: 2,
             ),
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  "Date",
-                  style: TextStyle(
-                    color: ConstantColor.backgroundColor,
-                    fontSize: 17,
-                    fontFamily: ConstantFonts.poppinsMedium,
+              TableRow(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // color: Colors.grey.shade300,
+                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        color: ConstantColor.background1Color,
+                        fontSize: 17,
+                        fontFamily: ConstantFonts.poppinsBold,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SelectableText(
-                  widget.fullSuggestions['date'].toString(),
-                  style: TextStyle(
-                      color: ConstantColor.headingTextColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SelectableText(
+                      val,
+                      style: TextStyle(
+                          color: ConstantColor.background1Color,
+                          fontSize: 17,
+                          fontFamily: ConstantFonts.poppinsMedium),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildIsRead() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
         ),
-        children: [
-          TableRow(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  "Is Read",
-                  style: TextStyle(
-                    color: ConstantColor.backgroundColor,
-                    fontSize: 17,
-                    fontFamily: ConstantFonts.poppinsMedium,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SelectableText(
-                  widget.fullSuggestions['isread'].toString(),
-                  style: TextStyle(
-                      color: ConstantColor.headingTextColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
-          TableRow(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
-            ),
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  "Time",
-                  style: TextStyle(
-                    color: ConstantColor.backgroundColor,
-                    fontSize: 17,
-                    fontFamily: ConstantFonts.poppinsMedium,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SelectableText(
-                  widget.fullSuggestions['time'].toString(),
-                  style: TextStyle(
-                      color: ConstantColor.headingTextColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
 
   Widget buildMessage() {
-    return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Table(
-          columnWidths: const {
-            0: FlexColumnWidth(1.5),
-            1: FlexColumnWidth(3),
-          },
-          border: TableBorder.all(
-            borderRadius: BorderRadius.circular(10),
-            color: ConstantColor.backgroundColor,
-            width: 1.5,
+    return Container(
+      margin: const EdgeInsets.all(10),
+      // padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(3),
+              1: FlexColumnWidth(3),
+            },
+            border: TableBorder.all(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white24,
+              width: 2,
+            ),
+            children: [
+              TableRow(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // color: Colors.grey.shade300,
+                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      "Message:",
+                      style: TextStyle(
+                        color: ConstantColor.background1Color,
+                        fontSize: 17,
+                        fontFamily: ConstantFonts.poppinsBold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              TableRow(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // color: Colors.blue,
+                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SelectableText(
+                      widget.fullSuggestions['message'].toString(),
+                      style: TextStyle(
+                        color: ConstantColor.background1Color,
+                        fontSize: 17,
+                        fontFamily: ConstantFonts.poppinsMedium,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          children: [
-            TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.shade300,
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Message:",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.shade300,
-              ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullSuggestions['message'].toString(),
-                    style: TextStyle(
-                      color: ConstantColor.headingTextColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
         ),
+      ),
     );
   }
 }

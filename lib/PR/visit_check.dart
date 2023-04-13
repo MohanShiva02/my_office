@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
+import 'package:my_office/util/main_template.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../models/view_visit_model.dart';
 import '../util/screen_template.dart';
@@ -63,10 +64,8 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildScreen(),
-      title: 'Visit Incharge',
-    );
+    return MainTemplate(subtitle: 'Visit Incharge', templateBody:  buildScreen(), bgColor: ConstantColor.background1Color);
+
   }
 
   Widget buildScreen() {
@@ -93,7 +92,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsBold,
                   fontSize: 17,
-                  color: ConstantColor.backgroundColor,
+                  color: ConstantColor.background1Color,
                 ),
               ),
             ],
@@ -117,14 +116,14 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                       },
                       leading: const CircleAvatar(
                         radius: 20,
-                        backgroundColor: ConstantColor.backgroundColor,
+                        backgroundColor: ConstantColor.background1Color,
                         child: Icon(Icons.person),
                       ),
                       title: Text(
                         allVisits[index].inChargeDetail.keys.first,
                         style: TextStyle(
                             fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
+                            color: ConstantColor.background1Color,
                             fontSize: 17),
                       ),
                     );
@@ -142,7 +141,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                         'No Visits available',
                         style: TextStyle(
                           fontFamily: ConstantFonts.poppinsMedium,
-                          color: ConstantColor.blackColor,
+                          color: ConstantColor.background1Color,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

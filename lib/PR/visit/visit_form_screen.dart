@@ -41,7 +41,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
     return TextButton.icon(
       onPressed: () =>        Navigator.of(context)
           .push(MaterialPageRoute(builder: (_) => const VisitScreen())),
-      style: TextButton.styleFrom(foregroundColor: const Color(0xff8355B7)),
+      style: TextButton.styleFrom(foregroundColor: const Color(0xffF1F2F8),backgroundColor: Colors.white.withOpacity(0.2)),
       label: Text(
         'Create new visit form',
         style:
@@ -67,12 +67,12 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                       border:
-                          Border.all(width: 1, color: const Color(0xff8355B7))),
+                          Border.all(width: 1, color: const Color(0xffF1F2F8))),
                   child: Text(
                     'No pending visit entry',
                     style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
-                      fontSize: 14.0,color: const Color(0xff8355B7)
+                      fontSize: 14.0,color: const Color(0xffF1F2F8)
                     ),
                   ),
                 ));
