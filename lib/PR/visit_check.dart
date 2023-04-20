@@ -92,7 +92,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsBold,
                   fontSize: 17,
-                  color: ConstantColor.background1Color,
+                  color: ConstantColor.blackColor,
                 ),
               ),
             ],
@@ -123,7 +123,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                         allVisits[index].inChargeDetail.keys.first,
                         style: TextStyle(
                             fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.background1Color,
+                            color: ConstantColor.blackColor,
                             fontSize: 17),
                       ),
                     );
@@ -141,7 +141,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                         'No Visits available',
                         style: TextStyle(
                           fontFamily: ConstantFonts.poppinsMedium,
-                          color: ConstantColor.background1Color,
+                          color: ConstantColor.blackColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

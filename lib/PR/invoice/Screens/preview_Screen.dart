@@ -25,7 +25,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 class PreviewScreen extends StatefulWidget {
-
   final String doctype;
   final String category;
   final int advanceAmt;
@@ -55,8 +54,6 @@ class PreviewScreen extends StatefulWidget {
 }
 
 class _PreviewScreenState extends State<PreviewScreen> {
-
-
   final HiveOperations _hiveOperations = HiveOperations();
   StaffModel? staffInfo;
 
@@ -67,7 +64,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
     });
   }
 
-
   bool isVisible = false;
   final GlobalKey _globalKey = GlobalKey();
   Uint8List? convertedImage;
@@ -75,7 +71,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Future<void> _convertImage() async {
     // print('called function');
     RenderRepaintBoundary boundary =
-    _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 10.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -186,17 +182,11 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Consumer<TaskData>(builder: (context, taskData, child) {
       final task =
-      taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
+          taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
       final invoice = taskData.invoiceListData;
       final val = taskData.subTotalValue;
       if (val.isEmpty) {
@@ -224,22 +214,25 @@ class _PreviewScreenState extends State<PreviewScreen> {
           upiID: "onwordspay@ybl",
           payeeName: "Onwords Smart Solutions",
           amount: grandTotal < 80000 ? grandTotal : null,
-          transactionNote:
-          widget.category == 'GA' ? "Gate Automation"
-              : widget.category == 'SH' ? "Smart Home"
-              : widget.category == 'IT' ? "APP or Web Development"
-              : widget.category == 'DL' ? "Door Lock"
-              : widget.category == 'SS' ? "Security System"
-              : widget.category == 'WTA' ? "Water Tank Automation"
-              : widget.category == 'AG' ? "Agriculture Automation"
-              : 'Onwords Smart Solutions'
-
-      );
-
+          transactionNote: widget.category == 'GA'
+              ? "Gate Automation"
+              : widget.category == 'SH'
+                  ? "Smart Home"
+                  : widget.category == 'IT'
+                      ? "APP or Web Development"
+                      : widget.category == 'DL'
+                          ? "Door Lock"
+                          : widget.category == 'SS'
+                              ? "Security System"
+                              : widget.category == 'WTA'
+                                  ? "Water Tank Automation"
+                                  : widget.category == 'AG'
+                                      ? "Agriculture Automation"
+                                      : 'Onwords Smart Solutions');
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xffDDE6E8),
           elevation: 0,
           title: Text(
             "Invoice Preview",
@@ -263,28 +256,29 @@ class _PreviewScreenState extends State<PreviewScreen> {
             },
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffDDE6E8),
         body: Form(
           key: formKey,
           child: Stack(
             children: [
               Positioned(
-                  top: 5,
-                  left: 0,
-                  right: 0,
-                  child: RepaintBoundary(
-                    key: _globalKey,
-                    child: UPIPaymentQRCode(
-                      upiDetails: upiDetails,
-                      size: 300,
-                    ),
-                  )),
+                top: 5,
+                left: 0,
+                right: 0,
+                child: RepaintBoundary(
+                  key: _globalKey,
+                  child: UPIPaymentQRCode(
+                    upiDetails: upiDetails,
+                    size: 300,
+                  ),
+                ),
+              ),
               Positioned(
                 top: 5,
                 left: 0,
                 right: 0,
                 child: Container(
-                  color: Colors.white,
+                  color: Color(0xffDDE6E8),
                   height: height * 1.0,
                   width: width * 1.0,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.05),
@@ -298,15 +292,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
                             Container(
                               padding: const EdgeInsets.all(05),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black26,
+                                  border: Border.all(
+                                      color: Colors.black26,
                                       width: width * 0.002),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Column(
                                 children: [
                                   Text(
-                                    'Date : ${DateFormat("dd.MM.yyyy").format(
-                                        date)}',
+                                    'Date : ${DateFormat("dd.MM.yyyy").format(date)}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: height * 0.012,
@@ -344,96 +337,103 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 ],
                               ),
                             ),
-
-                            widget.doctype == "INVOICE" ? Container(
-                              padding: const EdgeInsets.all(05),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black26,
-                                      width: width * 0.002),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Estimate Date For Installation',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: height * 0.012,
-                                        fontFamily: 'Nexa',
-                                        color: Colors.black),
-                                  ),
-                                  SizedBox(
-                                      height: height * 0.050,
-                                      width: width * 0.25,
-                                      child: TextFormField(
-                                        textInputAction: TextInputAction.done,
-                                        controller: estimateDate,
-                                        keyboardType: TextInputType.datetime,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Date required';
-                                          }
-                                          return null;
-                                        },
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: height * 0.012,
-                                          fontFamily: 'Avenir',
+                            widget.doctype == "INVOICE"
+                                ? Container(
+                                    padding: const EdgeInsets.all(05),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.black26,
+                                            width: width * 0.002),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Estimate Date For Installation',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: height * 0.012,
+                                              fontFamily: 'Nexa',
+                                              color: Colors.black),
                                         ),
-                                        readOnly: true,
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration(
-                                          // border: InputBorder.none,
-                                          hintText: 'Estimate Date',
-                                          hintStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Nexa',
-                                          ),
+                                        SizedBox(
+                                            height: height * 0.050,
+                                            width: width * 0.25,
+                                            child: TextFormField(
+                                              textInputAction:
+                                                  TextInputAction.done,
+                                              controller: estimateDate,
+                                              keyboardType:
+                                                  TextInputType.datetime,
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return 'Date required';
+                                                }
+                                                return null;
+                                              },
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: height * 0.012,
+                                                fontFamily: 'Avenir',
+                                              ),
+                                              readOnly: true,
+                                              textAlign: TextAlign.center,
+                                              decoration: InputDecoration(
+                                                // border: InputBorder.none,
+                                                hintText: 'Estimate Date',
+                                                hintStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: height * 0.012,
+                                                  fontFamily: 'Nexa',
+                                                ),
+                                              ),
+                                              onTap: () async {
+                                                DateTime? pickedDate =
+                                                    await showDatePicker(
+                                                        context: context,
+                                                        initialDate:
+                                                            DateTime.now(),
+                                                        firstDate:
+                                                            DateTime(2000),
+                                                        //DateTime.now() - not to allow to choose before today.
+                                                        lastDate:
+                                                            DateTime(2101));
 
-                                        ),
-                                        onTap: () async {
-                                          DateTime? pickedDate = await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              //DateTime.now() - not to allow to choose before today.
-                                              lastDate: DateTime(2101)
-                                          );
-
-                                          if (pickedDate != null) {
-                                            String formattedDate = DateFormat(
-                                                'yyyy-MM-dd').format(
-                                                pickedDate);
-                                            setState(() {
-                                              estimateDate.text =
-                                                  formattedDate; //set output date to TextField value.
-                                            });
-                                          }
-                                        },
-                                      )),
-                                ],
-                              ),
-                            ) : Container(),
+                                                if (pickedDate != null) {
+                                                  String formattedDate =
+                                                      DateFormat('yyyy-MM-dd')
+                                                          .format(pickedDate);
+                                                  setState(() {
+                                                    estimateDate.text =
+                                                        formattedDate; //set output date to TextField value.
+                                                  });
+                                                }
+                                              },
+                                            )),
+                                      ],
+                                    ),
+                                  )
+                                : Container(),
                             Column(
                               children: [
                                 widget.doctype == 'INVOICE'
                                     ? Text(
-                                  '#INVOICE ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: height * 0.014,
-                                      fontFamily: 'Avenir',
-                                      color: Colors.black),
-                                )
+                                        '#INVOICE ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: height * 0.014,
+                                            fontFamily: 'Avenir',
+                                            color: Colors.black),
+                                      )
                                     : Text(
-                                  '#QUOTATION ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: height * 0.014,
-                                      fontFamily: 'Avenir',
-                                      color: Colors.black),
-                                ),
+                                        '#QUOTATION ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: height * 0.014,
+                                            fontFamily: 'Avenir',
+                                            color: Colors.black),
+                                      ),
                               ],
                             ),
                           ],
@@ -460,16 +460,16 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         Text(
                           "${task.street},${task.address}",
                           style: const TextStyle(
-                            // fontWeight: FontWeight.w600,
-                            // fontSize: height * 0.011,
+                              // fontWeight: FontWeight.w600,
+                              // fontSize: height * 0.011,
                               fontFamily: 'Avenir',
                               color: Colors.black),
                         ),
                         Text(
                           task.gst,
                           style: const TextStyle(
-                            // fontWeight: FontWeight.w600,
-                            // fontSize: height * 0.011,
+                              // fontWeight: FontWeight.w600,
+                              // fontSize: height * 0.011,
                               fontFamily: 'Avenir',
                               color: Colors.black),
                         ),
@@ -500,7 +500,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: const Color(0xff00bcd4), width: 1.0),
-                              color: Colors.white,
+                              color: Color(0xffDDE6E8),
                               borderRadius: BorderRadius.circular(20)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -518,8 +518,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       (invoice[index].description),
                                       '${invoice[index].quantity}',
                                       '${invoice[index].unitPrice}',
-                                      '${invoice[index].quantity *
-                                          invoice[index].unitPrice}'
+                                      '${invoice[index].quantity * invoice[index].unitPrice}'
                                     ]),
                                   ],
                                 );
@@ -528,22 +527,24 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10.0),
+                          margin: const EdgeInsets.only(top: 30,),
                           width: width * 0.9,
+                          // color: Colors.cyanAccent,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GestureDetector(
                                 onTap: () async {
-                                  final isValid = formKey.currentState
-                                      ?.validate();
+                                  final isValid =
+                                      formKey.currentState?.validate();
                                   if (isValid!) {
                                     showDialog(
                                         context: context,
                                         barrierDismissible: false,
                                         builder: (context) {
                                           return const Center(
-                                            child: CircularProgressIndicator(),);
+                                            child: CircularProgressIndicator(),
+                                          );
                                         });
                                     await _convertImage();
 
@@ -595,19 +596,19 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
                                     currentPhoneDate = DateTime.now();
                                     Timestamp myTimeStamp =
-                                    Timestamp.fromDate(currentPhoneDate);
+                                        Timestamp.fromDate(currentPhoneDate);
                                     final databaseReference =
-                                    FirebaseDatabase.instance.ref();
+                                        FirebaseDatabase.instance.ref();
                                     final firebaseStorage =
                                         FirebaseStorage.instance;
 
-                                    final pdfFile = await PdfInvoiceApi
-                                        .generate(
-                                        invoice,
-                                        // user!,
-                                        convertedImage!);
-                                    PdfApi.openFile(pdfFile).then((
-                                        value) async {
+                                    final pdfFile =
+                                        await PdfInvoiceApi.generate(
+                                            invoice,
+                                            // user!,
+                                            convertedImage!);
+                                    PdfApi.openFile(pdfFile)
+                                        .then((value) async {
                                       // print(task.name);
                                       logData.setString(
                                           'accountNameSaved', accountName.text);
@@ -617,7 +618,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                           'ifscCodeSaved', ifsc.text);
                                       logData.setString(
                                           'bankNameSaved', bank.text);
-
 
                                       ///................FIREBASE..........
                                       if (widget.doctype == "INVOICE") {
@@ -629,19 +629,23 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         var downloadUrl =
                                             await snapshot.ref.getDownloadURL();
 
-                                      /// INSTALLATION-INVOICE......
-                                      final installationPdfFile = await InstallationInvoicePdf.generate(
+                                        /// INSTALLATION-INVOICE......
+                                        final installationPdfFile =
+                                            await InstallationInvoicePdf
+                                                .generate(
                                           invoice,
-                                        // user,
-                                      );
+                                          // user,
+                                        );
 
-                                        var snapshotInstallation = await firebaseStorage
-                                            .ref()
-                                            .child(
-                                            'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                            .putFile(installationPdfFile);
+                                        var snapshotInstallation =
+                                            await firebaseStorage
+                                                .ref()
+                                                .child(
+                                                    'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                                .putFile(installationPdfFile);
                                         var downloadUrlInstallation =
-                                        await snapshotInstallation.ref.getDownloadURL();
+                                            await snapshotInstallation.ref
+                                                .getDownloadURL();
 
                                         var da = {
                                           'Customer_name': task.name,
@@ -650,7 +654,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                           'CreatedBy': staffInfo?.email,
                                           'mobile_number': task.phone,
                                           'document_link': downloadUrl,
-                                          'installation_document_link': downloadUrlInstallation,
+                                          'installation_document_link':
+                                              downloadUrlInstallation,
                                         };
                                         databaseReference
                                             .child('QuotationAndInvoice')
@@ -660,8 +665,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             .child(
                                                 'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .set(da);
-                                      }
-                                      else {
+                                      } else {
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
@@ -690,33 +694,29 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       fileName.clear();
                                       quotNo.clear();
                                       estimateDate.clear();
-                                    }).then((value) =>
-                                    {
-                                      setState(() {
-                                        // if(!mounted) return;
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (
-                                                    _) => const UserHomeScreen()),
-                                                (route) => false);
-                                        Provider
-                                            .of<TaskData>(
-                                            context, listen: false)
-                                            .invoiceListData
-                                            .clear();
-                                        Provider
-                                            .of<TaskData>(
-                                            context, listen: false)
-                                            .value
-                                            .clear();
-                                        Provider.of<TaskData>(
-                                            context, listen: false)
-                                            .deleteCustomerDetails(1);
-                                      }),
-                                    });
-                                  }
-                                  else {
+                                    }).then((value) => {
+                                              setState(() {
+                                                // if(!mounted) return;
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                        MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                const UserHomeScreen()),
+                                                        (route) => false);
+                                                Provider.of<TaskData>(context,
+                                                        listen: false)
+                                                    .invoiceListData
+                                                    .clear();
+                                                Provider.of<TaskData>(context,
+                                                        listen: false)
+                                                    .value
+                                                    .clear();
+                                                Provider.of<TaskData>(context,
+                                                        listen: false)
+                                                    .deleteCustomerDetails(1);
+                                              }),
+                                            });
+                                  } else {
                                     showSnackBar(
                                         message: 'Please Fill All Filed',
                                         color: Colors.red);
@@ -740,11 +740,11 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     ],
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text(
-                                        'Save as',
+                                        'Save As',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
@@ -752,15 +752,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             color: Colors.white),
                                       ),
                                       Image.asset(
-                                        'assets/pdf.png', scale: 3.0,),
-
+                                        'assets/pdf.png',
+                                        scale: 3.0,
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: width * 0.05,
-                              ),
+
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
@@ -770,32 +769,30 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                   ),
                                   widget.gstValue
                                       ? Text(
-                                    "IGST 9% : ${Utils.formatPrice(gst)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  )
+                                          "IGST 9% : ${Utils.formatPrice(gst)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        )
                                       : Text(
-                                    "IGST 9% : ${Utils.formatPrice(0.0)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  ),
+                                          "IGST 9% : ${Utils.formatPrice(0.0)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
                                   widget.gstValue
                                       ? Text(
-                                    "CGST  9% : ${Utils.formatPrice(gst)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  )
+                                          "CGST  9% : ${Utils.formatPrice(gst)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        )
                                       : Text(
-                                    "IGST 9% : ${Utils.formatPrice(0.0)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  ),
+                                          "IGST 9% : ${Utils.formatPrice(0.0)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
                                   Text(
-                                    "Discount :        ${widget
-                                        .discountAmount}",
+                                    "Discount :        ${widget.discountAmount}",
                                     style: const TextStyle(fontSize: 10),
                                   ),
                                   Text(
                                     "Advance :       ${widget.advanceAmt}",
                                     style: const TextStyle(fontSize: 10),
                                   ),
-
                                   Text(
                                     "Grand Total  : $grandTotal",
                                     style: const TextStyle(
@@ -804,7 +801,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                   ),
                                 ],
                               ),
-
                             ],
                           ),
                         ),
@@ -823,25 +819,28 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   void showSnackBar({required String message, required Color color}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
-      padding: const EdgeInsets.all(0.0),
-      content: Container(
-        height: 50.0,
-        color: color,
-        child: Center(
-          child: Text(
-            message,
-            style: const TextStyle(fontFamily: 'Nexa'),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        padding: const EdgeInsets.all(0.0),
+        content: Container(
+          height: 50.0,
+          color: color,
+          child: Center(
+            child: Text(
+              message,
+              style: const TextStyle(fontFamily: 'Nexa'),
+            ),
           ),
-        ),),),);
+        ),
+      ),
+    );
   }
 
-  TableRow buildRow(List<String> cells, {bool isHeader = false}) =>
-      TableRow(
+  TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
         children: cells.map(
-              (cell) {
+          (cell) {
             const style = TextStyle(
               color: Colors.black,
             );

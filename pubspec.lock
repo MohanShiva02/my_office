@@ -176,6 +176,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  clay_containers:
+    dependency: "direct main"
+    description:
+      name: clay_containers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   clock:
     dependency: transitive
     description:
@@ -218,6 +225,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  confetti:
+    dependency: "direct main"
+    description:
+      name: confetti
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.0"
   connectivity_plus:
     dependency: "direct main"
     description:

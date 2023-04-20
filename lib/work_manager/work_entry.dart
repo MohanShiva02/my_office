@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/fade_effect.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -263,12 +264,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       controller: _tabController,
       physics: const BouncingScrollPhysics(),
       indicator: BoxDecoration(
+        // color: Color(0xffDDE6E8),
           gradient: LinearGradient(colors: [
-            Colors.white.withOpacity(0.5),
-            Colors.white.withOpacity(0.1)
+            Colors.blue.withOpacity(0.5),
+            Colors.cyanAccent.withOpacity(0.1)
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           borderRadius: BorderRadius.circular(10.0)),
-      labelColor: Colors.white,
+      labelColor: Colors.black,
       unselectedLabelColor: Colors.black.withOpacity(0.5),
       automaticIndicatorColorAdjustment: true,
       labelStyle: TextStyle(
@@ -293,7 +295,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   }
 
   Widget tabViewContainer(double height, double width) {
-    return Container(
+    return SizedBox(
       height: height * 0.9,
       // color: Colors.transparent,
       child: TabBarView(
@@ -319,29 +321,10 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
               child: Column(
                 children: [
                   /// Text Field
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                colors: [
-                                  Colors.white.withOpacity(0),
-                                  Colors.white.withOpacity(0)
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color:  Colors.white24,width: 2),
-                            // boxShadow: const [
-                            //   BoxShadow(
-                            //       color: Colors.black12,
-                            //       offset: Offset(-0.0, 6.0),
-                            //       blurRadius: 5),
-                            // ],
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: buildNeumorphic(
+                      width,height,10, Container(
                         child: textFiledWidget(
                             height,
                             TextInputType.text,
@@ -358,28 +341,33 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ButtonWidget(
-                            title: 'Start Time',
-                            onClicked: () {
-                              startTime();
-                            },
-                            colorValue: timeOfStart.toString().isEmpty
-                                ? a = false
-                                : a = true,
-                            icon: const Icon(Icons.alarm,color: Colors.white,),
-                            val:
-                                "${timeOfStartView!.isEmpty ? '--' : timeOfStartView}"),
-                        ButtonWidget(
-                            title: 'End Time',
-                            onClicked: () {
-                              endTime();
-                            },
-                            colorValue: timeOfEnd.toString().isEmpty
-                                ? b = false
-                                : b = true,
-                            icon: const Icon(Icons.alarm,color: Colors.white,),
-                            val:
-                                "${timeOfEndView!.isEmpty ? '--' : timeOfEndView}"),
+                        buildNeumorphic(
+                          width,height,10, ButtonWidget(
+                              title: 'Start Time',
+                              onClicked: () {
+                                startTime();
+                              },
+                              colorValue: timeOfStart.toString().isEmpty
+                                  ? a = false
+                                  : a = true,
+                              icon: const Icon(Icons.alarm,color: Colors.black,),
+                              val:
+                                  "${timeOfStartView!.isEmpty ? '--' : timeOfStartView}"),
+                        ),
+                        buildNeumorphic(
+                          width,height,10, ButtonWidget(
+                              title: 'End Time',
+                              onClicked: () {
+                                endTime();
+                              },
+                              colorValue: timeOfEnd.toString().isEmpty
+                                  ? b = false
+                                  : b = true,
+                              icon: const Icon(Icons.alarm,color: Colors.black,),
+                              val:
+                                  "${timeOfEndView!.isEmpty ? '--' : timeOfEndView}"),
+                        ),
+
                         GestureDetector(
                           onTap: () {
                             setState(() {
@@ -449,48 +437,38 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               ).show();
                             });
                           },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaY: 10,sigmaX: 10),
-                              child: Container(
-                                height: height * 0.15,
-                                width: width * 0.25,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: _percentController.text.isEmpty
-                                            ? Colors.white24
-                                            : Colors.blue,width: 2),
-
-                                    borderRadius: BorderRadius.circular(10),
-                                    gradient: LinearGradient(
-                                        colors: [Colors.white.withOpacity(0.5), Colors.white.withOpacity(0.1)],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight
-                                    )
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const Icon(Icons.percent,color: Colors.white,),
-                                    Text(
-                                      _percentController.text.isEmpty
-                                          ? '--'
-                                          : _percentController.text,
-                                      style: TextStyle(
-                                        fontFamily: ConstantFonts.poppinsMedium,
-                                        color: Colors.white
-                                      ),
+                          child: buildNeumorphic(width,height,10,
+                             Container(
+                              height: height * 0.15,
+                              width: width * 0.25,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: _percentController.text.isEmpty
+                                          ? Colors.transparent
+                                          : Colors.blue,width: 2),
+                                  borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  const Icon(Icons.percent,color: Colors.black,),
+                                  Text(
+                                    _percentController.text.isEmpty
+                                        ? '--'
+                                        : _percentController.text,
+                                    style: TextStyle(
+                                      fontFamily: ConstantFonts.poppinsMedium,
+                                      color: Colors.black
                                     ),
-                                    Text(
-                                      'percent',
-                                      style: TextStyle(
-                                        fontFamily: ConstantFonts.poppinsMedium,
-                                        color: Colors.white
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                  Text(
+                                    'percent',
+                                    style: TextStyle(
+                                      fontFamily: ConstantFonts.poppinsMedium,
+                                      color: Colors.black
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -500,6 +478,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                   ),
 
                   /// Submit Button
+                  SizedBox(
+                    height: height*0.13,
+                  ),
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -598,28 +579,21 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                         }
                       });
                     },
-                    child: Container(
-                      margin: EdgeInsets.only(top: height * 0.18),
-                      height: height * 0.07,
-                      width: width * 0.9,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xfff9d423),
-                            Color(0xfff83600),
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter
+                    child: buildNeumorphic( width, height,20,
+                       Container(
+                        height: height * 0.08,
+                        width: width * 0.9,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              fontSize: height * 0.025,
-                              color: Colors.white),
+                        child: Center(
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(
+                                fontFamily: ConstantFonts.poppinsBold,
+                                fontSize: height * 0.025,
+                                color: Colors.black),
+                          ),
                         ),
                       ),
                     ),
@@ -644,84 +618,58 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
             itemBuilder: (BuildContext ctx, index) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
-                    child: Container(
-                      // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
-                      // margin: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        // color: ConstantColor.background1Color,
-                          gradient: LinearGradient(
-                              colors: [Colors.white.withOpacity(0.2), Colors.white.withOpacity(0.4)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight
+                child: buildNeumorphic(
+                  width,height,20, Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        /// Work Details Container...
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: height * 0.02),
+                          padding: const EdgeInsets.all(8),
+                          height: height * 0.10,
+                          width: width * 0.88,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: Colors.black.withOpacity(0.2),
-                        //     offset: const Offset(-0.0, 5.0),
-                        //     blurRadius: 8,
-                        //   )
-                        // ],
-                        border: Border.all(color: Colors.white24,width: 2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        children: [
-                          /// Work Details Container...
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: height * 0.02),
-                            padding: const EdgeInsets.all(8),
-                            height: height * 0.10,
-                            width: width * 0.88,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              // color: ConstantColor.backgroundColor.withOpacity(0.09),
-                                gradient: LinearGradient(
-                                    colors: [Colors.white.withOpacity(0), Colors.white.withOpacity(0)],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight
-                                ),
-                            ),
-                            child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(),
-                              child: textWidget(
-                                height,
-                                workDoneList[index],
-                                height * 0.02,
-                              ),
+                          child: SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: textWidget(
+                              height,
+                              workDoneList[index],
+                              height * 0.02,
                             ),
                           ),
+                        ),
 
-                          /// Time....
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              textWidget(height, 'Start : ${startTimeList[index]}',
-                                  height * 0.020),
-                              textWidget(height, 'End : ${endTimeList[index]}',
-                                  height * 0.020),
-                              textWidget(
-                                  height,
-                                  'Duration : ${workingHoursList[index]}',
-                                  height * 0.020),
-                            ],
-                          ),
-
-                          /// Percentage......
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: percentIndicator(
+                        /// Time....
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            textWidget(height, 'Start : ${startTimeList[index]}',
+                                height * 0.020),
+                            textWidget(height, 'End : ${endTimeList[index]}',
+                                height * 0.020),
+                            textWidget(
                                 height,
-                                percent = double.parse(workPercentageList[index]
-                                        .replaceAll(RegExp(r'.$'), "")) /
-                                    100,
-                                "${workPercentageList[index]}"),
-                          ),
-                        ],
-                      ),
+                                'Duration : ${workingHoursList[index]}',
+                                height * 0.020),
+                          ],
+                        ),
+
+                        /// Percentage......
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: percentIndicator(
+                              height,
+                              percent = double.parse(workPercentageList[index]
+                                      .replaceAll(RegExp(r'.$'), "")) /
+                                  100,
+                              "${workPercentageList[index]}"),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -732,7 +680,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
               'No Works Completed',
               style: TextStyle(
                   fontFamily: ConstantFonts.poppinsMedium,
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold),
             ),
           );
@@ -766,7 +714,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         style: TextStyle(
             fontSize: size,
             fontFamily: ConstantFonts.poppinsMedium,
-            color: ConstantColor.background1Color),
+            color: ConstantColor.blackColor),
       ),
     );
   }
@@ -789,18 +737,19 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       },
       style: TextStyle(
           fontSize: height * 0.02,
-          color: Colors.white,
+          color: Colors.black,
           fontFamily: ConstantFonts.poppinsRegular),
       decoration: InputDecoration(
+        fillColor: Color(0xffDDE6E8),
         border: InputBorder.none,
         hintText: hintName,
-        hintStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
+        hintStyle: TextStyle(color: Colors.black.withOpacity(0.9)),
         filled: true,
         // fillColor: Colors.transparent,
         contentPadding:
             const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: ConstantColor.background1Color),
+          borderSide: const BorderSide(color: Colors.transparent),
           borderRadius: BorderRadius.circular(10.0),
         ),
         enabledBorder: UnderlineInputBorder(
@@ -808,6 +757,21 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
+    );
+  }
+
+  Widget buildNeumorphic(double width, double height,double radius, Widget widget,) {
+    return Neumorphic(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      style: NeumorphicStyle(
+        depth: 3,
+        shadowLightColorEmboss: Colors.white12.withOpacity(0.8),
+        shadowLightColor: Colors.white.withOpacity(0.8),
+        boxShape: NeumorphicBoxShape.roundRect(
+          BorderRadius.circular(radius),
+        ),
+      ),
+      child: widget,
     );
   }
 
@@ -856,45 +820,34 @@ class ButtonWidget extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: onClicked,
-      child: ClipRRect(
+      child: Container(
+        margin: EdgeInsets.only(top: height * 0.0),
+        height: height * 0.15,
+        width: width * 0.25,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
-          child: Container(
-            margin: EdgeInsets.only(top: height * 0.0),
-            height: height * 0.15,
-            width: width * 0.25,
-            decoration: BoxDecoration(
-                border:
-                    Border.all(color: colorValue ? Colors.blue : Colors.white24,width: 2),
-                gradient: LinearGradient(
-                    colors: [Colors.white.withOpacity(0.5), Colors.white.withOpacity(0.1)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight
-                ),
-                borderRadius: BorderRadius.circular(10)
-                ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                icon,
-                Text(
-                  val,
-                  style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    color: Colors.white
-                  ),
-                ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: ConstantFonts.poppinsMedium,
-                  ),
-                ),
-              ],
+            border:
+            Border.all(color: colorValue ? Colors.blue : Colors.transparent,width: 2),
             ),
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            icon,
+            Text(
+              val,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                color: Colors.black
+              ),
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: ConstantFonts.poppinsMedium,
+              ),
+            ),
+          ],
         ),
       ),
     );

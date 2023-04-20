@@ -16,6 +16,7 @@ class ScreenTemplate extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Color(0xffDDE6E8),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -26,16 +27,6 @@ class ScreenTemplate extends StatelessWidget {
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).viewPadding.top * 1.5),
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    // "https://img.freepik.com/premium-photo/abstract-mixed-paint-background_692702-9722.jpg?w=900",
-                      "assets/736859589449 - Copy.jpg"
-                  ),
-                  // image: NetworkImage(
-                  //       "https://img.freepik.com/premium-vector/3d-trend-gradient-colorful-twisted-liquid-line-shape-abstract-background-red-orange-fluid-wave_263857-53.jpg?w=900",
-                  //
-                  //   ),
-                  fit: BoxFit.cover,),
                 borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(30.0),
                   bottomLeft: Radius.circular(30.0),
@@ -54,7 +45,7 @@ class ScreenTemplate extends StatelessWidget {
                         IconButton(
                             onPressed: () => Navigator.of(context).pop(),
                             icon:
-                                const Icon(Icons.arrow_back_ios_new_rounded,color: ConstantColor.background1Color,)),
+                                const Icon(Icons.arrow_back_ios_new_rounded,color: ConstantColor.blackColor,)),
 
                         //Name and subtitle
                         Text(
@@ -62,7 +53,7 @@ class ScreenTemplate extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: ConstantFonts.poppinsMedium,
                             fontSize: 24.0,
-                            color: ConstantColor.background1Color,
+                            color: ConstantColor.blackColor,
                           ),
                         ),
                       ],

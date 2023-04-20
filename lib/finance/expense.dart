@@ -89,7 +89,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsBold,
                   fontSize: 17,
-                  color: ConstantColor.background1Color,
+                  color: ConstantColor.blackColor,
                 ),
               ),
             ],

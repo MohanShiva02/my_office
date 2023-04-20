@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_model.dart';
@@ -156,59 +157,36 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
     for (int i = 0; i < nameData.length; i++) {
       final widget = Padding(
         padding: const EdgeInsets.all(10.0),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaY: 10,sigmaX: 10,),
-            child: Container(
-              // height: height * 0.1,
-              // margin: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.black.withOpacity(0.2),
-                //     offset: const Offset(-0.0, 5.0),
-                //     blurRadius: 8,
-                //   )
-                // ],
-                border: Border.all(color: Colors.white24,width: 3),
-                  gradient: LinearGradient(
-                      colors: [Colors.white.withOpacity(0.1), Colors.white.withOpacity(0.3)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight
+        child: buildNeumorphic(
+          width,height, Center(
+            child: ListTile(
+              onTap: () {
+                var workDone;
+                if (allData[i]['name'].contains(nameData[i])) {
+                  workDone = allData[i]['workDone'];
+                }
+                workDone =
+                    allData.where((element) => element['name'] == nameData[i]);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => IndividualWorkDone(
+                        workDetails: workDone.toList(),
+                        employeeName: nameData[i]),
                   ),
-                borderRadius: BorderRadius.circular(11),
+                );
+              },
+              leading: const CircleAvatar(
+                radius: 20,
+                backgroundColor: ConstantColor.backgroundColor,
+                child: Icon(Icons.person),
               ),
-              child: Center(
-                child: ListTile(
-                  onTap: () {
-                    var workDone;
-                    if (allData[i]['name'].contains(nameData[i])) {
-                      workDone = allData[i]['workDone'];
-                    }
-                    workDone =
-                        allData.where((element) => element['name'] == nameData[i]);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => IndividualWorkDone(
-                            workDetails: workDone.toList(),
-                            employeeName: nameData[i]),
-                      ),
-                    );
-                  },
-                  leading: const CircleAvatar(
-                    radius: 20,
-                    backgroundColor: ConstantColor.backgroundColor,
-                    child: Icon(Icons.person),
-                  ),
-                  title: Text(
-                    '${nameData[i]}',
-                    style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsMedium,
-                        color: ConstantColor.background1Color,
-                        fontSize: height * 0.020),
-                  ),
-                ),
+              title: Text(
+                '${nameData[i]}',
+                style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                    color: ConstantColor.blackColor,
+                    fontSize: height * 0.020),
               ),
             ),
           ),
@@ -251,7 +229,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                         style: TextStyle(
                             fontFamily: ConstantFonts.poppinsBold,
                             fontSize: 17,
-                            color: ConstantColor.background1Color)),
+                            color: ConstantColor.blackColor)),
                   ],
                 ),
               ),
@@ -272,7 +250,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                             'No work done yet',
                             style: TextStyle(
                               fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.background1Color,
+                              color: ConstantColor.blackColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -282,5 +260,26 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                     ),
             ],
           );
+  }
+
+  Widget buildNeumorphic(double width, double height, Widget widget) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+        child: Neumorphic(
+          // margin: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+          style: NeumorphicStyle(
+            border: const NeumorphicBorder(color: Colors.black26,width: 3),
+            color: Colors.transparent,
+            depth: 2,
+            boxShape: NeumorphicBoxShape.roundRect(
+              BorderRadius.circular(20),
+            ),
+          ),
+          child: widget,
+        ),
+      ),
+    );
   }
 }

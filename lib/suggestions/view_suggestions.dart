@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../util/main_template.dart';
@@ -46,13 +47,15 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return MainTemplate(
         subtitle: 'Check for Suggestions!!',
-        templateBody: viewSuggestionsPage(),
+        templateBody: viewSuggestionsPage(width,height),
         bgColor: ConstantColor.background1Color);
   }
 
-  Widget viewSuggestionsPage() {
+  Widget viewSuggestionsPage(double width,double height) {
     return allSuggestion.isEmpty
         ? const Center(
             child: CircularProgressIndicator(),
@@ -63,43 +66,28 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white24,width: 2),
-                          gradient: LinearGradient(
-                              colors: [Colors.white.withOpacity(0.3), Colors.white.withOpacity(0.1)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight
-                          )
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AllSuggestions(
-                                  fullSuggestions: allSuggestion[index]),
-                            ),
-                          );
-                        },
-                        leading: const CircleAvatar(
-                          radius: 20,
-                          backgroundColor: ConstantColor.background1Color,
-                          child: Icon(Icons.date_range),
+                child: buildNeumorphic(
+                  width,height, ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AllSuggestions(
+                              fullSuggestions: allSuggestion[index]),
                         ),
-                        title: Text(
-                          allSuggestion[index]['date'].toString(),
-                          style: TextStyle(
-                            color: ConstantColor.background1Color,
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                      );
+                    },
+                    leading: const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: ConstantColor.blackColor,
+                      child: Icon(Icons.date_range),
+                    ),
+                    title: Text(
+                      allSuggestion[index]['date'].toString(),
+                      style: TextStyle(
+                        color: ConstantColor.blackColor,
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -107,5 +95,18 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
               );
             },
           );
+  }
+
+  Widget buildNeumorphic(double width, double height, Widget widget) {
+    return Neumorphic(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      style: NeumorphicStyle(
+        depth: 2,
+        boxShape: NeumorphicBoxShape.roundRect(
+          BorderRadius.circular(20),
+        ),
+      ),
+      child: widget,
+    );
   }
 }

@@ -21,6 +21,8 @@ import 'package:my_office/util/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../PR/product/new_product.dart';
+import '../PR/product/point_calculations.dart';
 import '../attendance/attendance_screen.dart';
 import '../PR/visit_check.dart';
 import '../attendance/view_attendance.dart';
@@ -90,6 +92,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         final updatedAdminVersion = data['adminVersion'];
         final updatedPrVersion = data['prVersion'];
 
+        // print(updatedPrVersion);
+        // print(updatedAdminVersion);
+        // print(updatedPrVersion);
         if (staffInfo?.department == 'ADMIN') {
           if (AppConstants.adminDepVersion != updatedAdminVersion) {
             showUpdateAppDialog();
@@ -122,7 +127,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final width = MediaQuery.of(context).size.width;
     return MainTemplate(
       subtitle: 'Choose your destination here!',
-      templateBody: ClipRRect(borderRadius: BorderRadius.all(Radius.circular(30)),child: buildMenuGrid(height, width)),
+      templateBody: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+          child: buildMenuGrid(height, width)),
       bgColor: ConstantColor.background1Color,
     );
   }
@@ -344,7 +351,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10.0,
                                 mainAxisSpacing: 10.0,
-                                mainAxisExtent: 230),
+                                mainAxisExtent: 200),
                         children: [
                           buildButton(
                             name: 'Work Manager',
@@ -422,7 +429,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             name: 'Invoice Generator',
                             image: Image.asset(
                               'assets/invoice.png',
-                              scale: 2,
+                              scale: 2.5,
                             ),
                             page: const CustomerDetails(),
                           ),
@@ -457,7 +464,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             name: 'Virtual Attendance',
                             image: Image.asset(
                               'assets/attendance.png',
-                              scale: 3,
+                              scale: 4.5,
                             ),
                             page: AttendanceScreen(
                               uid: staffInfo!.uid,
@@ -468,7 +475,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             name: 'View Suggestions',
                             image: Image.asset(
                               'assets/view_suggestions.png',
-                              scale: 15,
+                              scale: 18,
                             ),
                             page: ViewSuggestions(
                               uid: staffInfo!.uid,
@@ -483,6 +490,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const ViewAttendanceScreen(),
                           ),
+                          buildButton(
+                              name: 'Create New Products',
+                              image: Image.asset(
+                                'assets/view_attendance.png',
+                                scale: 4.5,
+                              ),
+                              page: const CreateNewProduct()),
+                          buildButton(
+                              name: 'Points Calculations',
+                              image: Image.asset(
+                                'assets/invoice.png',
+                                scale: 2.5,
+                              ),
+                              page: const PointCalculationsScreen())
                         ],
                       )
                     : GridView(
@@ -553,50 +574,37 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   Widget buildButton(
       {required String name, required Image image, required Widget page}) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
-        child: GestureDetector(
-          onTap: () {
-            HapticFeedback.vibrate();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => page));
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 18.0),
-            decoration: BoxDecoration(
-                // color: const Color(0xffDAD6EE),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white24,width: 2),
-                gradient: LinearGradient(
-                    colors: [Colors.white.withOpacity(0), Colors.white.withOpacity(0.2)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight
-                )
-                // boxShadow: const [
-                //   BoxShadow(
-                //       color: Colors.black26,
-                //       offset: Offset(3.0, 3.0),
-                //       blurRadius: 3)
-                // ],
-                ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Center(child: image),
-                AutoSizeText(
-                  name,
-                  style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    color: ConstantColor.background1Color,
-                  ),
-                  maxFontSize: 18,
-                  minFontSize: 12,
-                )
-              ],
-            ),
-          ),
+    return Neumorphic(
+      margin: EdgeInsets.all(5),
+      padding: EdgeInsets.all(13),
+        style: NeumorphicStyle(
+        depth: 3,
+        color: Color(0xffDDE6E8),
+        shadowLightColor: Colors.white.withOpacity(0.9),
+        shadowDarkColor: Colors.black.withOpacity(0.7),
+        boxShape: NeumorphicBoxShape.roundRect(
+        BorderRadius.circular(20),),
+        ),
+      child: GestureDetector(
+        onTap: () {
+          HapticFeedback.vibrate();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => page));
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Center(child: image),
+            AutoSizeText(
+              name,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsBold,
+                color: ConstantColor.blackColor,
+              ),
+              maxFontSize: 18,
+              minFontSize: 12,
+            )
+          ],
         ),
       ),
     );

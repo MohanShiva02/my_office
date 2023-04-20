@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/main_template.dart';
@@ -43,53 +44,47 @@ class _AllSuggestionsState extends State<AllSuggestions> {
     return Container(
       margin: const EdgeInsets.all(10),
       // padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(3),
-              1: FlexColumnWidth(3),
-            },
-            border: TableBorder.all(
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(3),
+          1: FlexColumnWidth(3),
+        },
+        border: TableBorder.all(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.black,
+          width: 2,
+        ),
+        children: [
+          TableRow(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white24,
-              width: 2,
+              // color: Colors.grey.shade300,
             ),
             children: [
-              TableRow(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  // color: Colors.grey.shade300,
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: ConstantColor.blackColor,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.poppinsBold,
+                  ),
                 ),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: ConstantColor.background1Color,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsBold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SelectableText(
-                      val,
-                      style: TextStyle(
-                          color: ConstantColor.background1Color,
-                          fontSize: 17,
-                          fontFamily: ConstantFonts.poppinsMedium),
-                    ),
-                  ),
-                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SelectableText(
+                  val,
+                  style: TextStyle(
+                      color: ConstantColor.blackColor,
+                      fontSize: 17,
+                      fontFamily: ConstantFonts.poppinsMedium),
+                ),
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
@@ -109,7 +104,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
             },
             border: TableBorder.all(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.white24,
+              color: Colors.black,
               width: 2,
             ),
             children: [
@@ -124,7 +119,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                     child: Text(
                       "Message:",
                       style: TextStyle(
-                        color: ConstantColor.background1Color,
+                        color: ConstantColor.blackColor,
                         fontSize: 17,
                         fontFamily: ConstantFonts.poppinsBold,
                       ),
@@ -143,7 +138,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                     child: SelectableText(
                       widget.fullSuggestions['message'].toString(),
                       style: TextStyle(
-                        color: ConstantColor.background1Color,
+                        color: ConstantColor.blackColor,
                         fontSize: 17,
                         fontFamily: ConstantFonts.poppinsMedium,
                       ),

@@ -170,17 +170,17 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                 const SizedBox(height: 15.0),
                 Text(
                   'Wait until refreshment portal opens...',
-                  style: TextStyle(fontFamily: ConstantFonts.poppinsBold,color: Colors.white,fontSize: 16.0),
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsBold,color: Colors.black,fontSize: 16.0),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 25.0),
                 Text(
                   'Morning refreshment and food time: 9:30 AM - 11:00 AM',
-                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.white,fontSize: 12.0),
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.black,fontSize: 12.0),
                   textAlign: TextAlign.center,
                 ),Text(
                   'Evening refreshment time: 1:30 PM - 3:30 PM',
-                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.white,fontSize: 12.0),
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.black,fontSize: 12.0),
                   textAlign: TextAlign.center,
                 ),
               ],

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/util/main_template.dart';
@@ -54,57 +55,42 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                      Colors.white.withOpacity(0),
-                      Colors.white.withOpacity(0)
-                    ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white24, width: 2),
-
-                  ),
-                  child: TextField(
-                    textInputAction: TextInputAction.done,
-                    controller: suggestionsController,
-                    scrollPhysics: const BouncingScrollPhysics(),
-                    maxLines: 10,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontFamily: ConstantFonts.poppinsRegular),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Your Suggestion',
-                      hintStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
-                      filled: true,
-                      // fillColor: Colors.transparent,
-                      contentPadding:
-                      const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: ConstantColor.background1Color),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.transparent),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
+          buildNeumorphic(
+            width,height, TextField(
+              textInputAction: TextInputAction.done,
+              controller: suggestionsController,
+              scrollPhysics: const BouncingScrollPhysics(),
+              maxLines: 10,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontFamily: ConstantFonts.poppinsRegular),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: 'Your Suggestion',
+                hintStyle: TextStyle(color: Colors.black.withOpacity(0.9)),
+                filled: true,
+                fillColor: Color(0xffDDE6E8),
+                contentPadding:
+                const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: ConstantColor.blackColor),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.transparent),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
+            ),
           ),
           const SizedBox(height: 10),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Text('Character count : $characterCount',style: const TextStyle(color: ConstantColor.background1Color),),
+            child: Text('Character count : $characterCount',style: const TextStyle(color: ConstantColor.blackColor),),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: height*0.25),
           // Container(
           //   height: 60,
           //   width: 150,
@@ -137,28 +123,18 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 addSuggestionToDatabase();
               });
             },
-            child: Container(
-              margin: EdgeInsets.only(top: height * 0.30),
-              height: height * 0.07,
-              width: width * 0.9,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: const LinearGradient(
-                    colors: [
-                      Color(0xfff9d423),
-                      Color(0xfff83600),
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  'Submit',
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      fontSize: height * 0.025,
-                      color: Colors.white),
+            child: buildNeumorphic(
+              width,height, Container(
+                height: height * 0.07,
+                width: width * 0.9,
+                child: Center(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontSize: height * 0.025,
+                        color: Colors.black),
+                  ),
                 ),
               ),
             ),
@@ -226,5 +202,18 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+  }
+
+  Widget buildNeumorphic(double width, double height, Widget widget) {
+    return Neumorphic(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      style: NeumorphicStyle(
+        depth: 3,
+        boxShape: NeumorphicBoxShape.roundRect(
+          BorderRadius.circular(20),
+        ),
+      ),
+      child: widget,
+    );
   }
 }

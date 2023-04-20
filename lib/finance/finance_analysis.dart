@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/util/main_template.dart';
@@ -20,11 +21,13 @@ class FinanceScreen extends StatefulWidget {
 class _FinanceScreenState extends State<FinanceScreen> {
   @override
   Widget build(BuildContext context) {
-    return MainTemplate(subtitle:'Financial Analyzing', templateBody: buildFinanceScreen(), bgColor: ConstantColor.background1Color,);
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return MainTemplate(subtitle:'Financial Analyzing', templateBody: buildFinanceScreen(width,height), bgColor: ConstantColor.background1Color,);
 
   }
 
-  Widget buildFinanceScreen() {
+  Widget buildFinanceScreen(double width,double height) {
     return Padding(
       padding: const EdgeInsets.all(25),
       child: SingleChildScrollView(
@@ -32,7 +35,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildButton(
-              name: 'Income',
+             width,height, name: 'Income',
               image: Image.asset(
                 'assets/income.png',
                 scale: 3,
@@ -41,7 +44,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
             ),
 
             buildButton(
-              name: 'Expense',
+              width,height,name: 'Expense',
               image: Image.asset(
                 'assets/expense.png',
                 scale: 3,
@@ -53,49 +56,53 @@ class _FinanceScreenState extends State<FinanceScreen> {
       ),
     );
   }
-  Widget buildButton(
+  Widget buildButton(double width,double height,
       {required String name, required Image image, required Widget page}) {
     return GestureDetector(
       onTap: () {
         HapticFeedback.vibrate();
         Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaY: 10,sigmaX: 10),
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            height: 230,
-            // width: 300,
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+      child: buildNeumorphic(
+         width,height,Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          height: 230,
+          // width: 300,
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
 
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white24,width: 2),
-                gradient: LinearGradient(
-                    colors: [Colors.white.withOpacity(0.1), Colors.white.withOpacity(0.5)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight
-                )
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Center(child: image),
-                AutoSizeText(
-                  name,
-                  style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    color: ConstantColor.background1Color,
-                  ),
-                  minFontSize: 22,
-                )
-              ],
-            ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Center(child: image),
+              AutoSizeText(
+                name,
+                style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  color: ConstantColor.blackColor,
+                ),
+                minFontSize: 22,
+              )
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildNeumorphic(double width, double height, Widget widget) {
+    return Neumorphic(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      style: NeumorphicStyle(
+        depth: 3,
+        boxShape: NeumorphicBoxShape.roundRect(
+          BorderRadius.circular(20),
+        ),
+      ),
+      child: widget,
     );
   }
 
