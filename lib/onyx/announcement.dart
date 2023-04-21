@@ -152,6 +152,45 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                 ],
               ),
             ),
+             Positioned(
+               left: width * 0.2,
+               top: height * 0.3,
+               child: Stack(
+                 alignment: Alignment.center,
+                 children: [
+                   // ClayContainer(
+                   //   // child: Lottie.asset('assets/14982-smart-home.json'),
+                   //   color: Colors.orange,
+                   //   width: 180,
+                   //   height: 180,
+                   //   borderRadius: 200,
+                   //   depth: 80,
+                   //   spread: 5,
+                   //   curveType: CurveType.convex,
+                   //
+                   // ),
+                   ClayContainer(
+                     color: Color(0xffDDE6E8),
+                     width: 100,
+                     height: 100,
+                     borderRadius: 200,
+                     depth: -50,
+                     spread: 2,
+                     curveType: CurveType.convex,
+                   ),
+                   ClayContainer(
+                     color: Colors.blue,
+                     width: 50,
+                     height: 50,
+                     borderRadius: 200,
+                     depth: -50,
+                     spread: 0,
+                     curveType: CurveType.convex,
+                   ),
+
+                 ],
+               ),
+             ),
 
              Positioned(
                left: width * - 0.04,

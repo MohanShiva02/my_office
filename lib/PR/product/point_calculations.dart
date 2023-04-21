@@ -13,14 +13,15 @@ class PointCalculationsScreen extends StatefulWidget {
   const PointCalculationsScreen({Key? key}) : super(key: key);
 
   @override
-  State<PointCalculationsScreen> createState() => _PointCalculationsScreenState();
+  State<PointCalculationsScreen> createState() =>
+      _PointCalculationsScreenState();
 }
 
 class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
   final ref = FirebaseDatabase.instance.ref();
 
   final SingleValueDropDownController itermNameController =
-  SingleValueDropDownController();
+      SingleValueDropDownController();
   TextEditingController quantityController = TextEditingController();
   TextEditingController percentageController = TextEditingController();
 
@@ -55,14 +56,14 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
     ref.child('inventory_management').once().then((value) {
       for (var a in value.snapshot.children) {
         // print(a.key);
-        if(!mounted) return;
+        if (!mounted) return;
         setState(() {
           setProductName = a.value;
           productList.add(
               DropDownValueModel(name: setProductName['name'], value: count));
         });
         // print(productList);
-        if(!mounted) return;
+        if (!mounted) return;
         setState(() {
           count++;
         });
@@ -81,8 +82,6 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
             maxPrice = setval['max_price'];
             minPrice = setval['min_price'];
             obcPrice = setval['obc'];
-
-
           });
         }
       }
@@ -134,14 +133,14 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                 padding: const EdgeInsets.all(10),
                 // color: Colors.black,
                 duration: const Duration(milliseconds: 500),
-                height:
-                getPointsStatus == false ? height * 1 : height * 0.0,
+                height: getPointsStatus == false ? height * 1 : height * 0.0,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       SizedBox(
                         height: height * 0.05,
                       ),
+
                       ///Drop Down
                       buildNeumorphic(
                         height,
@@ -181,11 +180,9 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   dropDownItemCount: 7,
                                   dropDownList: productList,
                                   onChanged: (val) {
-                                    selectedVal = itermNameController
-                                        .dropDownValue?.name;
+                                    selectedVal =
+                                        itermNameController.dropDownValue?.name;
                                     getProductsDetails();
-
-
                                   },
                                 ),
                               ),
@@ -208,7 +205,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                               width: width * 0.5,
                               height: height * 0.08,
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Center(
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
@@ -229,15 +227,19 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                               ),
                             ),
                           ),
+
                           ///ADD BUTTON
                           GestureDetector(
                             onTap: () {
-
                               if (itermNameController.dropDownValue == null) {
-                                showSnackBar(message: 'Select Product', color: Colors.red);
-                              }else if(quantityController.text.isEmpty){
-                                showSnackBar(message: 'Fill Quantity', color: Colors.red);
-                              }else{
+                                showSnackBar(
+                                    message: 'Select Product',
+                                    color: Colors.red);
+                              } else if (quantityController.text.isEmpty) {
+                                showSnackBar(
+                                    message: 'Fill Quantity',
+                                    color: Colors.red);
+                              } else {
                                 setState(() {
                                   minPriceList.add(
                                       int.parse(quantityController.text) *
@@ -248,50 +250,50 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           int.parse(obcPrice.toString()));
 
                                   final index = listOfProductDetails.indexWhere(
-                                          (element) =>
-                                      element.productName ==
+                                      (element) =>
+                                          element.productName ==
                                           itermNameController
                                               .dropDownValue?.name);
                                   if (index > -1) {
                                     listOfProductDetails[index]
-                                        .productQuantity +=
+                                            .productQuantity +=
                                         int.parse(quantityController.text);
                                     listOfProductDetails[index].subTotalList +=
                                         int.parse(listOfProductDetails[index]
-                                            .productPrice) *
+                                                .productPrice) *
                                             int.parse(quantityController.text);
                                   } else {
                                     final product = TableList(
                                         productName: itermNameController
                                             .dropDownValue!.name,
                                         productQuantity:
-                                        int.parse(quantityController.text),
+                                            int.parse(quantityController.text),
                                         productPrice: maxPrice.toString(),
                                         subTotalList:
-                                        int.parse(quantityController.text) *
-                                            int.parse(maxPrice.toString()));
+                                            int.parse(quantityController.text) *
+                                                int.parse(maxPrice.toString()));
                                     listOfProductDetails.add(product);
                                   }
                                   var sum = 0.0;
                                   for (var i = 0;
-                                  i < listOfProductDetails.length;
-                                  i++) {
+                                      i < listOfProductDetails.length;
+                                      i++) {
                                     sum += listOfProductDetails[i].subTotalList;
                                     maxTotal = sum.toInt();
                                   }
 
                                   var sum1 = 0.0;
                                   for (var i = 0;
-                                  i < minPriceList.length;
-                                  i++) {
+                                      i < minPriceList.length;
+                                      i++) {
                                     sum1 += minPriceList[i];
                                     minTotal = sum1.toInt();
                                   }
 
                                   var sum2 = 0.0;
                                   for (var i = 0;
-                                  i < obcPriceList.length;
-                                  i++) {
+                                      i < obcPriceList.length;
+                                      i++) {
                                     sum2 += obcPriceList[i];
                                     obcTotal = sum2.toInt();
                                   }
@@ -324,10 +326,11 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.w900,
                                         fontSize: height * 0.020),
-                                  ),),),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-
                         ],
                       ),
 
@@ -335,7 +338,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 500),
                         // color: Colors.black,
-                        height: showTable ? height*0.55 : height* 0,
+                        height: showTable ? height * 0.55 : height * 0,
 
                         child: SingleChildScrollView(
                           child: Column(
@@ -351,7 +354,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   height: height * 0.08,
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
                                         width: width * 0.15,
@@ -417,6 +420,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   ),
                                 ),
                               ),
+
                               /// Table Value
                               buildNeumorphic(
                                 width,
@@ -429,7 +433,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     scrollDirection: Axis.vertical,
                                     physics: const BouncingScrollPhysics(),
                                     itemCount: listOfProductDetails.length,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return GestureDetector(
                                         onTap: () {
                                           // showDeleteDialog(context, index);
@@ -467,7 +472,6 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                               ///Get Points Button
                               GestureDetector(
                                 onTap: () {
-
                                   setState(() {
                                     getPointsStatus = true;
                                     //     minPriceList.add(
@@ -539,7 +543,6 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     //             .toInt();
                                     //     getPointsStatus = true;
                                   });
-
                                 },
                                 child: buildNeumorphic(
                                   width,
@@ -549,94 +552,27 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                       height: height * 0.08,
                                       child: Center(
                                           child: Text(
-                                            'Get Price Details',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: height * 0.025),
-                                          ))),
+                                        'Get Price Details',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: height * 0.025),
+                                      ))),
                                 ),
                               ),
                             ],
                           ),
-                        ),),
-
-
-
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-
-              // ElevatedButton(
-              //     onPressed: () {
-              //       setState(() {
-              //         minPriceList.add(int.parse(quantityController.text) *
-              //             int.parse(minPrice.toString()));
-              //
-              //         obcPriceList.add(int.parse(quantityController.text) *
-              //             int.parse(obcPrice.toString()));
-              //
-              //         final index = listOfProductDetails.indexWhere(
-              //             (element) =>
-              //                 element.productName ==
-              //                 itermNameController.dropDownValue?.name);
-              //         if (index > -1) {
-              //           listOfProductDetails[index].productQuantity +=
-              //               int.parse(quantityController.text);
-              //           listOfProductDetails[index].subTotalList += int.parse(
-              //                   listOfProductDetails[index].productPrice) *
-              //               int.parse(quantityController.text);
-              //         } else {
-              //           final product = TableList(
-              //               productName:
-              //                   itermNameController.dropDownValue!.name,
-              //               productQuantity:
-              //                   int.parse(quantityController.text),
-              //               productPrice: maxPrice.toString(),
-              //               subTotalList: int.parse(quantityController.text) *
-              //                   int.parse(maxPrice.toString()));
-              //           listOfProductDetails.add(product);
-              //         }
-              //         var sum = 0.0;
-              //         for (var i = 0; i < listOfProductDetails.length; i++) {
-              //           sum += listOfProductDetails[i].subTotalList;
-              //           maxTotal = sum.toInt();
-              //         }
-              //
-              //         var sum1 = 0.0;
-              //         for (var i = 0; i < minPriceList.length; i++) {
-              //           sum1 += minPriceList[i];
-              //           minTotal = sum1.toInt();
-              //         }
-              //
-              //         var sum2 = 0.0;
-              //         for (var i = 0; i < obcPriceList.length; i++) {
-              //           sum2 += obcPriceList[i];
-              //           obcTotal = sum2.toInt();
-              //         }
-              //
-              //         discount = int.parse(maxTotal.toString()) -
-              //             int.parse(minTotal.toString());
-              //
-              //         print('$maxTotal , $discount $obcTotal');
-              //         percentage = int.parse(maxTotal.toString()) /
-              //             int.parse(discount.toString());
-              //
-              //         maximumDiscount =
-              //             double.parse(percentage.toString()).toInt();
-              //
-              //         itermNameController.clearDropDown();
-              //         quantityController.clear();
-              //       });
-              //     },
-              //     child: const Text('Calculate')),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
                 height: getPointsStatus ? height * 1 : height * 0.0,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-
                       buildNeumorphic(
                           width,
                           height,
@@ -674,7 +610,11 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter quantity';
-                                      } else if (int.parse(value) >
+                                      } else if (value
+                                          .toString()
+                                          .contains('.')) {
+                                        return 'Enter Single Value';
+                                      } else if (int.parse(value) >=
                                           int.parse(
                                               maximumDiscount.toString())) {
                                         return 'Enter less then $maximumDiscount % ';
@@ -686,7 +626,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText:
-                                        'Enter below ${maximumDiscount.toString()} %'),
+                                            'Enter below ${maximumDiscount.toString()} %'),
                                     controller: percentageController,
                                   ),
                                 ),
@@ -706,8 +646,12 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                 SizedBox(
                                   height: height * 0.09,
                                   width: width * 0.3,
-                                  child: const Center (
-                                      child: Text('Add Products',style: TextStyle(fontWeight: FontWeight.w900),)),
+                                  child: const Center(
+                                      child: Text(
+                                    'Add Products',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w900),
+                                  )),
                                 ),
                               ),
                             ),
@@ -723,36 +667,33 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                       int.parse(percentageController.text) /
                                       100;
                               // print(discountedAmount);
-                              finalAmount = double.parse(
-                                  maxTotal.toString()) -
+                              finalAmount = double.parse(maxTotal.toString()) -
                                   double.parse(discountedAmount.toString());
 
-                              prPoint = (double.parse(
-                                  finalAmount.toString()) -
-                                  double.parse(obcTotal.toString())) /
+                              prPoint = (double.parse(finalAmount.toString()) -
+                                      double.parse(obcTotal.toString())) /
                                   1000;
 
-
+                              print(prPoint);
                               // prPoint = double.parse(prPoint!.toStringAsFixed(3));
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => PointView(
-                                        points: prPoint.toString(),
-                                      )));
-                              percentageController.clear();
-                              itermNameController.clearDropDown();
-                              quantityController.clear();
-                              listOfProductDetails.clear();
-                              maxTotal = 0;
-                              minTotal = 0;
-                              discount = 0;
-                              percentage = 0;
-                              minPriceList.clear();
-                              showTable = false;
-                              getPointsStatus = false;
-
-
+                                            points: prPoint.toString(),
+                                          ))).then((value) {
+                                percentageController.clear();
+                                itermNameController.clearDropDown();
+                                quantityController.clear();
+                                listOfProductDetails.clear();
+                                maxTotal = 0;
+                                minTotal = 0;
+                                discount = 0;
+                                percentage = 0;
+                                minPriceList.clear();
+                                showTable = false;
+                                getPointsStatus = false;
+                              });
                             });
                           }
                         },
@@ -780,7 +721,6 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -820,23 +760,23 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
   }
 
   TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
-    children: cells.map(
+        children: cells.map(
           (cell) {
-        final style = TextStyle(
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-        );
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: Text(
-              cell,
-              style: style,
-            ),
-          ),
-        );
-      },
-    ).toList(),
-  );
+            final style = TextStyle(
+              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+            );
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Center(
+                child: Text(
+                  cell,
+                  style: style,
+                ),
+              ),
+            );
+          },
+        ).toList(),
+      );
 
   void showSnackBar({required String message, required Color color}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -868,9 +808,9 @@ class TableList {
 
   TableList(
       {required this.productName,
-        required this.productQuantity,
-        required this.productPrice,
-        required this.subTotalList});
+      required this.productQuantity,
+      required this.productPrice,
+      required this.subTotalList});
 }
 
 class PointView extends StatefulWidget {
@@ -941,47 +881,48 @@ class _PointViewState extends State<PointView> {
           ),
           SizedBox(height: height * 0.4),
           Center(
-              child:  Listener(
-                onPointerUp: (_) => setState(() {
-                  isPressed = false;
-                }),
-                onPointerDown: (_) => setState(() {
-                  isPressed = true;
-                }),
-                child: GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: Neumorphic(
-                    duration: Duration(milliseconds: 100),
-                    style: NeumorphicStyle(
-                      depth: isPressed ? 0 : -3,
-
-                      color: Color(0xff282C35),
-                      shadowDarkColor: Colors.white,
-                      shadowDarkColorEmboss: Colors.white,
-                      shadowLightColor: Colors.black,
-                      shadowLightColorEmboss: Colors.black,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                        BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: SizedBox(
-                      height:height*0.08,
-                      width:width*0.5,
-                      child: Center(
-                        child: Text(
-                          'Go Back',
-                          style: TextStyle(fontSize: height * 0.03,fontWeight: FontWeight.bold,color: const Color(0xffDDE6E8)),
-                        ),
-                      ),
+              child: Listener(
+            onPointerUp: (_) => setState(() {
+              isPressed = false;
+            }),
+            onPointerDown: (_) => setState(() {
+              isPressed = true;
+            }),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  Navigator.pop(context);
+                });
+              },
+              child: Neumorphic(
+                duration: Duration(milliseconds: 100),
+                style: NeumorphicStyle(
+                  depth: isPressed ? 0 : -3,
+                  color: Color(0xff282C35),
+                  shadowDarkColor: Colors.white,
+                  shadowDarkColorEmboss: Colors.white,
+                  shadowLightColor: Colors.black,
+                  shadowLightColorEmboss: Colors.black,
+                  boxShape: NeumorphicBoxShape.roundRect(
+                    BorderRadius.circular(30),
+                  ),
+                ),
+                child: SizedBox(
+                  height: height * 0.08,
+                  width: width * 0.5,
+                  child: Center(
+                    child: Text(
+                      'Go Back',
+                      style: TextStyle(
+                          fontSize: height * 0.03,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xffDDE6E8)),
                     ),
                   ),
                 ),
-              )
-          ),
+              ),
+            ),
+          )),
         ],
       ),
     );
