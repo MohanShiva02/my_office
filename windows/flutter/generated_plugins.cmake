@@ -5,7 +5,6 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus_windows
   geolocator_windows
-  upi_payment_qrcode_generator
   url_launcher_windows
 )
 

@@ -16,7 +16,6 @@ import geolocator_apple
 import path_provider_foundation
 import shared_preferences_foundation
 import sqflite
-import upi_payment_qrcode_generator
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
@@ -31,6 +30,5 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
   SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
   SqflitePlugin.register(with: registry.registrar(forPlugin: "SqflitePlugin"))
-  UpiPaymentQrcodeGeneratorPlugin.register(with: registry.registrar(forPlugin: "UpiPaymentQrcodeGeneratorPlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))
 }

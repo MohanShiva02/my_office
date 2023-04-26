@@ -4,7 +4,7 @@ import 'package:my_office/PR/invoice/api/pdf_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
+// import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
 import '../image_saving/user.dart';
 import '../model/customer.dart';
 import '../model/invoice.dart';
