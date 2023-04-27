@@ -75,9 +75,12 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
     ref.child('inventory_management').once().then((value) {
       for (var a in value.snapshot.children) {
         // print(a.value);
-        if (a.value.toString().contains(selectedVal.toString())) {
-          // print(a.value);
+        final x = a.value as Map<Object?,Object?>;
+        if (x['name'].toString().toUpperCase() == selectedVal.toString().toUpperCase()) {
+        // if (a.value.toString().contains(selectedVal.toString())) {
+        //   print(a.value);
           setval = a.value;
+
           setState(() {
             maxPrice = setval['max_price'];
             minPrice = setval['min_price'];
@@ -183,6 +186,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     selectedVal =
                                         itermNameController.dropDownValue?.name;
                                     getProductsDetails();
+                                    print(selectedVal);
                                   },
                                 ),
                               ),
