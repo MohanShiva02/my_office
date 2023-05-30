@@ -208,11 +208,6 @@ class _CustomerItemState extends State<CustomerItem> {
                 value: values[8],
                 nobColor: nobColor,
                 size: size),
-            buildField(
-                field: fields[9],
-                value: values[9],
-                nobColor: nobColor,
-                size: size)
           ],
         ),
       ),

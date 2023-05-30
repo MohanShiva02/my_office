@@ -139,7 +139,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   setNotification() async {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
-    _notificationService.showDailyNotification(
+    _notificationService.showDailyNotificationWithPayload(
         setTime: isNotificationSet);
   }
 
@@ -224,7 +224,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       {required String name, required Image image, required Widget page}) {
     return GestureDetector(
       onTap: () {
-        HapticFeedback.mediumImpact();
+        HapticFeedback.vibrate();
         Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
       child: Container(
@@ -302,30 +302,57 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         return WillPopScope(
           child: StatefulBuilder(
             builder: (BuildContext context, setState) => CupertinoAlertDialog(
-              title: Text(
+              title: isUpdating
+                  ? Text(
+                      'App is updating..',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsBold,
+                      ),
+                    )
+                  : Text(
                       "New Update Available!!",
                       style: TextStyle(
                         fontFamily: ConstantFonts.poppinsBold,
                       ),
-              ),
-              content: Text(
-                      "You are currently using an outdated version. Contact the app team for using the latest version..",
+                    ),
+              content: isUpdating
+                  ? Column(
+                    children: [
+                      const Text('While prompted to update \nPress Update'),
+                      Lottie.asset('assets/animations/app_update.json'),
+                    ],
+                  )
+                  : Text(
+                      "You are currently using an outdated version. Update the app to use the latest features..",
                       style: TextStyle(
                         fontFamily: ConstantFonts.poppinsMedium,
                       ),
                     ),
+
               actions: [
-                TextButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    child: Text('Update later',
+                 isUpdating ? SizedBox.shrink() :CupertinoDialogAction(
+                  isDefaultAction: true,
+                  textStyle: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                  onPressed: () async {
+                    final permission = await Permission.requestInstallPackages.isGranted;
+                  if (permission){
+                    setState(() {
+                      isUpdating = true;
+                    });
+                    onClickInstallApk();
+                  }else{
+                   await Permission.requestInstallPackages.request();
+                  }
+                  },
+                  child: Text(
+                    "Update Now",
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsRegular,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: ConstantColor.backgroundColor,
-                    ),)
+                        color: ConstantColor.backgroundColor,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: ConstantFonts.poppinsRegular),
+                  ),
                 ),
               ],
             ),
