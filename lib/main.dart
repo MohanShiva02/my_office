@@ -13,6 +13,7 @@ import 'package:my_office/util/notification_services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'PR/invoice/provider_page.dart';
+import 'firebase_options.dart';
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
@@ -21,7 +22,9 @@ import 'models/visit_model.dart';
 
   Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
   //Hive database Setup
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
@@ -54,7 +57,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    _notificationService.initializePlatformNotifications();
+    _notificationService.initNotification();
     super.initState();
   }
 

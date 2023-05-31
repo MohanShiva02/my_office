@@ -70,10 +70,9 @@ class _MainTemplateState extends State<MainTemplate> {
     final width = MediaQuery.of(context).size.width;
     return RefreshIndicator(
       onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 5));
-        if (!mounted) return;
+        await Future.delayed(const Duration(seconds: 4));
         setState(() {
-          _pageLoadController();
+          getImageUrl();
         });
       },
       child: Scaffold(
@@ -219,8 +218,8 @@ class _MainTemplateState extends State<MainTemplate> {
                       top: MediaQuery.of(context).viewPadding.top * 1.1),
                   child: ClipRRect(
                     borderRadius: const BorderRadius.only(
-                      bottomRight: Radius.circular(30.0),
-                      bottomLeft: Radius.circular(30.0),
+                      bottomRight: Radius.circular(0.0),
+                      bottomLeft: Radius.circular(0.0),
                     ),
                     child: Column(
                       children: [
@@ -283,12 +282,12 @@ class _MainTemplateState extends State<MainTemplate> {
                                                   staffDetails: staffInfo!)));
                                         },
                                         child: SizedBox(
-                                          height: height * 0.08,
-                                          width: height * 0.08,
+                                          height: height * 0.065,
+                                          width: height * 0.065,
                                           child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(100),
+                                              borderRadius: BorderRadius.circular(12),
                                               child: preferencesImageUrl == ''
-                                                  ? const Icon(Iconsax.user)
+                                                  ? const Icon(Icons.person_pin)
                                                   : Image.network(
                                                 preferencesImageUrl,
                                                 fit: BoxFit.cover,
@@ -307,7 +306,7 @@ class _MainTemplateState extends State<MainTemplate> {
                             ),
                           ),
                         ),
-                        SizedBox(height: height * 0.01),
+                        SizedBox(height: height * 0.001),
                         //Custom widget section
                         Expanded(child: widget.templateBody),
                       ],
@@ -322,11 +321,5 @@ class _MainTemplateState extends State<MainTemplate> {
         ),
       ),
     );
-  }
-
-  Future _pageLoadController() async {
-    setState(() {
-      getImageUrl();
-    });
   }
 }

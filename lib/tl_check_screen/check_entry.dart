@@ -35,7 +35,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
   Future<void> staffDetails() async {
     adminStaffNames.clear();
     List<StaffAttendanceModel> fullEntry = [];
-    await ref.child('staff_details').once().then((staffEntry) async {
+    await ref.child('staff').once().then((staffEntry) async {
       for (var data in staffEntry.snapshot.children) {
         var entry = data.value as Map<Object?, Object?>;
         final staffEntry = StaffAttendanceModel(
@@ -137,6 +137,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
         : widget.staffName == 'Nikhil Deepak' ||
         widget.staffName == 'Devendiran' ||
         widget.staffName == 'Anitha' ||
+        widget.staffName == 'Jibin K John' ||
         widget.staffName == 'Prem Kumar' ||
         widget.staffName == 'Koushik Romel'
                             ? ListView.builder(

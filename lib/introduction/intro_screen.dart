@@ -15,7 +15,7 @@ class IntroductionScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          imageWidget(height),
+          imageWidget(height, width),
           textWidget(height, width),
         ],
       ),
@@ -28,9 +28,9 @@ class IntroductionScreen extends StatelessWidget {
     );
   }
 
-  Widget imageWidget(double height) {
+  Widget imageWidget(double height, double width) {
     return Container(
-      height: height * 0.45,
+      height: height * 0.55,
       width: double.infinity,
       color: ConstantColor.background1Color,
       child: Image.asset(

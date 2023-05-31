@@ -1,50 +1,27 @@
 import 'dart:developer';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
 
-  //init
-  Future<void> initializePlatformNotifications() async {
+  Future<void> initNotification() async {
     tz.initializeTimeZones();
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@drawable/suitcase');
-    const InitializationSettings settings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
-    _notifications.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()!.requestPermission();
-    await _notifications.initialize(
-      settings,
-    );
-  }
+    // Ios initialization
+    const initializationSettingsIOS = DarwinInitializationSettings();
 
-  Future<NotificationDetails> _notificationDetails() async {
-    AndroidNotificationDetails androidNotificationDetails =
-        const AndroidNotificationDetails('My Office', 'Refreshment',
-            groupKey: 'com.onwords.office',
-            channelDescription: 'Notifications for refreshment reminder',
-            importance: Importance.max,
-            priority: Priority.high,
-            enableLights: true,
-            sound: RawResourceAndroidNotificationSound('notification'),
-            autoCancel: false,
-            // audioAttributesUsage: AudioAttributesUsage.notification,
-            playSound: true,
-            fullScreenIntent: true,
-            onlyAlertOnce: false,
-            enableVibration: true,
-            channelAction: AndroidNotificationChannelAction.createIfNotExists,
-            color: Color(0xff8355B7));
-    return NotificationDetails(android: androidNotificationDetails);
+    const InitializationSettings initializationSettings =
+    InitializationSettings(iOS: initializationSettingsIOS);
+
+    // the initialization settings are initialized after they are setted
+    await _notifications.initialize(initializationSettings);
   }
 
   //showing notification function
-  Future<void> showDailyNotificationWithPayload({required String setTime}) async {
+  Future<void> showDailyNotification({required String setTime}) async {
     //Notification setting main function
     setNotification() async {
       final pref = await SharedPreferences.getInstance();
@@ -54,10 +31,17 @@ class NotificationService {
       final notTimeEvg = DateTime(
           currentTime.year, currentTime.month, currentTime.day, 14, 00);
 
-      final detail = await _notificationDetails();
+      const detail = NotificationDetails(
+        iOS: DarwinNotificationDetails(
+          sound: 'notification.wav',
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      );
 
-      const title = 'Refreshment time';
-      const body = 'Don\'t forget to update your refreshment preferences.';
+      const title = '🔥Refreshment is coming!!';
+      const body = 'Place your order for refreshment';
       // 10 AM
 
       for (int i = 0; i < 8; i++) {
@@ -67,38 +51,36 @@ class NotificationService {
         //Morning notification
         if (notificationTimeMorning.weekday != 7) {
           if (currentTime.hour >= 10 && i == 0) {
-            // print('Morining time already passed');
+            print('Morning time already passed');
           } else {
             log("Notification set for mng $notificationTimeMorning");
             _notifications.zonedSchedule(
-              i+1,
+              i + 1,
               title,
               body,
               tz.TZDateTime.from(notificationTimeMorning, tz.local),
-
               detail,
               uiLocalNotificationDateInterpretation:
-                  UILocalNotificationDateInterpretation.absoluteTime,
+              UILocalNotificationDateInterpretation.absoluteTime,
               androidAllowWhileIdle: true,
             );
-
           }
         }
 
         //Evening notificaiton
         if (notificationTimeEvening.weekday != 7) {
           if (currentTime.hour >= 14 && i == 0) {
-            // print('Evening time already passed');
+            print('Evening time already passed');
           } else {
             log("Notification set for Evg $notificationTimeEvening");
             _notifications.zonedSchedule(
-              i+10,
+              i + 10,
               title,
               body,
               tz.TZDateTime.from(notificationTimeEvening, tz.local),
               detail,
               uiLocalNotificationDateInterpretation:
-                  UILocalNotificationDateInterpretation.absoluteTime,
+              UILocalNotificationDateInterpretation.absoluteTime,
               androidAllowWhileIdle: true,
             );
           }
@@ -113,7 +95,7 @@ class NotificationService {
     if (setTime.isNotEmpty) {
       final notificationSetTime = DateTime.parse(setTime);
       if (currentTime
-              .compareTo(notificationSetTime.add(const Duration(days: 6))) >
+          .compareTo(notificationSetTime.add(const Duration(days: 6))) >
           0) {
         //notification set time is passed
         setNotification();

@@ -188,13 +188,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
       absentNames.add(widget);
     }
 
-    return isLoading
-        ? Center(
-            child: Lottie.asset(
-              "assets/animations/new_loading.json",
-            ),
-          )
-        : Column(
+    return Column(
             children: [
               //calender button
               Padding(
@@ -218,6 +212,20 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
+              Text('Total absentees : ${notEntry.length}',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontFamily: ConstantFonts.poppinsRegular,
+              ),),
+              isLoading
+                  ? Center(
+                child: Lottie.asset(
+                  "assets/animations/new_loading.json",
+                ),
+              )
+                  :
               notEntry.isNotEmpty
                   ? Expanded(
                       child: SingleChildScrollView(
