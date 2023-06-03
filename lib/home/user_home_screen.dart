@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +17,9 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
+import 'package:my_office/leave_approval/leave_approval_screen.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/suggestions/view_suggestions.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:my_office/util/notification_services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,7 +29,7 @@ import '../Constant/fonts/constant_font.dart';
 import '../app_version/version.dart';
 import '../constant/app_defaults.dart';
 import '../database/hive_operations.dart';
-import '../refreshment/refreshment_screen.dart';
+import 'package:http/http.dart' as http;
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -82,8 +87,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
     setState(() {
-      log('names are $managementStaffNames');
-      log('data are ${data.name}');
+      log('management names are $managementStaffNames');
+      log('current user is ${data.name}');
       if (managementStaffNames.any((element) => element == data.name)) {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('View suggestions');
@@ -132,6 +137,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
       }
       staffInfo = data;
+      getToken();
     });
   }
 
@@ -157,12 +163,75 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //Getting device specific token from each device..
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  Future<void> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    if (token.isEmpty) {
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      log('Token of the device is $fcmToken');
+      await saveTokenToDb(fcmToken!);
+      FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDb);
+      prefs.setString('token', fcmToken);
+    }
+  }
+
+  //Saving device token in Firestore database..
+  Future<void> saveTokenToDb(String fcmToken) async {
+    await FirebaseFirestore.instance
+        .collection('Devices')
+        .doc(staffInfo!.uid)
+        .set({
+      'Name': staffInfo!.name,
+      'Date': DateFormat('dd-MM-yyyy').format(DateTime.now()),
+      'Time': DateFormat.jms().format(DateTime.now()),
+      'Token': fcmToken,
+    });
+  }
+
+  //Requesting permission for sending separate notifications to specific devices..
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('user granted access');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('user granted limited access');
+    } else {
+      print('user denied permission');
+    }
+  }
+
   @override
   void initState() {
     checkAppVersion();
     getManagementNames();
     getConnectivity();
     setNotification();
+    requestPermission();
+
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      final screen = event.data['screen'];
+      if (screen == 'ViewSuggestionsScreen') {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) =>
+                const ViewSuggestions()));
+      }else if(screen == 'LeaveApprovalScreen'){
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => LeaveApprovalScreen(name: staffInfo!.name, uid: staffInfo!.uid,)));
+      }
+    });
     super.initState();
   }
 
@@ -304,7 +373,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             builder: (BuildContext context, setState) => CupertinoAlertDialog(
               title: isUpdating
                   ? Text(
-                      'App is updating..',
+                      'Checking for update..',
                       style: TextStyle(
                         fontFamily: ConstantFonts.poppinsBold,
                       ),
@@ -317,43 +386,53 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
               content: isUpdating
                   ? Column(
-                    children: [
-                      const Text('While prompted to update \nPress Update'),
-                      Lottie.asset('assets/animations/app_update.json'),
-                    ],
-                  )
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          'While prompted to update \nPress Update',
+                          style: TextStyle(
+                              color: ConstantColor.backgroundColor,
+                              fontSize: 16,
+                              fontFamily: ConstantFonts.poppinsRegular,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Lottie.asset('assets/animations/app_update.json'),
+                      ],
+                    )
                   : Text(
                       "You are currently using an outdated version. Update the app to use the latest features..",
                       style: TextStyle(
                         fontFamily: ConstantFonts.poppinsMedium,
                       ),
                     ),
-
               actions: [
-                 isUpdating ? SizedBox.shrink() :CupertinoDialogAction(
-                  isDefaultAction: true,
-                  textStyle: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
-                  ),
-                  onPressed: () async {
-                    final permission = await Permission.requestInstallPackages.isGranted;
-                  if (permission){
-                    setState(() {
-                      isUpdating = true;
-                    });
-                    onClickInstallApk();
-                  }else{
-                   await Permission.requestInstallPackages.request();
-                  }
-                  },
-                  child: Text(
-                    "Update Now",
-                    style: TextStyle(
-                        color: ConstantColor.backgroundColor,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: ConstantFonts.poppinsRegular),
-                  ),
-                ),
+                isUpdating
+                    ? SizedBox.shrink()
+                    : CupertinoDialogAction(
+                        isDefaultAction: true,
+                        textStyle: TextStyle(
+                          fontFamily: ConstantFonts.poppinsMedium,
+                        ),
+                        onPressed: () async {
+                          final permission =
+                              await Permission.requestInstallPackages.isGranted;
+                          if (permission) {
+                            setState(() {
+                              isUpdating = true;
+                            });
+                            onClickInstallApk();
+                          } else {
+                            await Permission.requestInstallPackages.request();
+                          }
+                        },
+                        child: Text(
+                          "Update Now",
+                          style: TextStyle(
+                              color: ConstantColor.backgroundColor,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: ConstantFonts.poppinsRegular),
+                        ),
+                      ),
               ],
             ),
           ),

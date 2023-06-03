@@ -145,7 +145,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Absentees',
+        subtitle: 'Absentees list!!',
         templateBody: bodyContent(),
         bgColor: ConstantColor.background1Color);
   }
@@ -212,13 +212,14 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
               Text('Total absentees : ${notEntry.length}',
               style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
                 fontFamily: ConstantFonts.poppinsRegular,
-              ),),
+                fontWeight: FontWeight.w600,
+                fontSize: 17,
+                height: 2,
+              ),
+              ),
               isLoading
                   ? Center(
                 child: Lottie.asset(
