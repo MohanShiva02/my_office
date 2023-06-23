@@ -4,7 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
-  upi_payment_qrcode_generator
+  printing
   url_launcher_linux
 )
 
