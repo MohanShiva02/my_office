@@ -278,7 +278,7 @@ class Skeleton extends StatelessWidget {
             const SizedBox(width: 20,),
             Container(
               height: 55,
-              width: 160,
+              width: 155,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,

@@ -176,15 +176,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Container(
-      height: height * 0.90,
+      height: height * 0.92,
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: ConstantColor.background1Color,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
       child: Stack(
         children: [
           Positioned(
@@ -193,7 +186,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
             right: width * 0.05,
             // bottom: height * 0.5,
             child: Container(
-              height: height * 0.43,
+              height: height * 0.5,
               width: width * 0.5,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -205,13 +198,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
                       blurRadius: 5)
                 ],
               ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  textFieldWidget('Reason for leave...', 'Reason :',
-                      leaveReason, TextInputType.name, TextInputAction.done),
-                ],
-              ),
+              child: textFieldWidget('Reason for leave...', 'Reason :',
+                  leaveReason, TextInputType.name, TextInputAction.done),
             ),
           ),
 

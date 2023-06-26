@@ -320,7 +320,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: DelayedDisplay(
                       delay: 1.9.seconds,
                       child: Text(
-                        'Version ${AppConstants.displayVersion}',
+                        'Version ${AppConstants.iosDisplayVersion}',
                         style: TextStyle(
                           color: Colors.grey,
                           fontFamily: ConstantFonts.poppinsMedium,

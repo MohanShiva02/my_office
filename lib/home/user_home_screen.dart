@@ -194,8 +194,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     ref.child('myOffice').once().then((value) {
       if (value.snapshot.exists) {
         final data = value.snapshot.value as Map<Object?, Object?>;
-        final updatedVersion = data['versionNumber'];
-        if (AppConstants.pubVersion != updatedVersion) {
+        final updatedVersion = data['iosVersionNumber'];
+        if (AppConstants.iosPubVersion != updatedVersion) {
           showUpdateAppDialog();
         }
       }
@@ -429,62 +429,29 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         return WillPopScope(
           child: StatefulBuilder(
             builder: (BuildContext context, setState) => CupertinoAlertDialog(
-              title: isUpdating
-                  ? Text(
-                      'Checking for update..',
-                      style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsBold,
-                      ),
-                    )
-                  : Text(
+              title: Text(
                       "New Update Available!!",
                       style: TextStyle(
                         fontFamily: ConstantFonts.poppinsBold,
                       ),
                     ),
-              content: isUpdating
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        Text(
-                          'While prompted to update \nPress Update',
-                          style: TextStyle(
-                              color: ConstantColor.backgroundColor,
-                              fontSize: 16,
-                              fontFamily: ConstantFonts.poppinsRegular,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Lottie.asset('assets/animations/app_update.json'),
-                      ],
-                    )
-                  : Text(
-                      "You are currently using an outdated version. Update the app to use the latest features..",
+              content: Text(
+                      "You are currently using an outdated version. Wait until you receive updates from Testflight..",
                       style: TextStyle(
                         fontFamily: ConstantFonts.poppinsMedium,
                       ),
                     ),
               actions: [
-                isUpdating
-                    ? SizedBox.shrink()
-                    : CupertinoDialogAction(
+                CupertinoDialogAction(
                         isDefaultAction: true,
                         textStyle: TextStyle(
                           fontFamily: ConstantFonts.poppinsMedium,
                         ),
                         onPressed: () async {
-                          final permission =
-                              await Permission.requestInstallPackages.isGranted;
-                          if (permission) {
-                            setState(() {
-                              isUpdating = true;
-                            });
-                            onClickInstallApk();
-                          } else {
-                            await Permission.requestInstallPackages.request();
-                          }
+                          Navigator.of(context).pop();
                         },
                         child: Text(
-                          "Update Now",
+                          "Ok",
                           style: TextStyle(
                               color: ConstantColor.backgroundColor,
                               fontWeight: FontWeight.w600,

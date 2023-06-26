@@ -2,21 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string> This app requires Photos to change the Profile image</string>
-    <key>NSCameraUsageDescription</key>
-    <string> This app requires Camera access to change the Profile image</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>This app requires access to location to access Wi-Fi information.</string>
-   	<key>NSLocationAlwaysUsageDescription</key>
-   	<string>This app needs access to your location to scan for available Wi-Fi networks.</string>
-   	<key>NSLocationWhenInUseUsageDescription</key>
-   	<string>This app requires access to location to access Wi-Fi information.</string>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-       <key>NSAllowsArbitraryLoads</key><true/>
-    </dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -41,8 +26,28 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string> This app requires Camera access to change the Profile image</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app requires access to location to access Wi-Fi information.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs access to your location to scan for available Wi-Fi networks.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires access to location to access Wi-Fi information.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string> This app requires Photos to change the Profile image</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
